@@ -1,0 +1,32 @@
+.topPic {
+	border-bottom: 5px solid black;
+}
+.hide {
+	display:hidden;
+}
+.fixBorder {
+	border: 10px solid black;
+	height: 250px;
+	margin:25px;
+}
+.mainSection {
+	margin-left: auto; 
+    margin-right: auto;
+    text-align: center;
+    clear:both;
+}
+.headerGood {
+	width:100%;
+	height: auto
+}
+.choices {
+	font-size: 18px;
+	margin-top: 25px;
+}
+.boxCreate {
+	border: 2px solid black;
+	height: 150px;
+}
+.moveDown {
+	margin-top: 10px;
+}
