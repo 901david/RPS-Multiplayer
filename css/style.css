@@ -1,5 +1,6 @@
 .topPic {
 	border-bottom: 5px solid black;
+	padding: 0;
 }
 .hide {
 	display:hidden;
@@ -18,10 +19,19 @@
 .headerGood {
 	width:100%;
 	height: auto
+
 }
 .choices {
 	font-size: 18px;
-	margin-top: 25px;
+	margin-top: 10px;
+	text-align: center;
+	width: 75px;
+	height: 25px;
+	border:2px solid transparent;
+}
+.choices:hover {
+	background-color: lightgray;
+	border:2px solid black;
 }
 .boxCreate {
 	border: 2px solid black;
@@ -30,3 +40,5 @@
 .moveDown {
 	margin-top: 10px;
 }
+
+
