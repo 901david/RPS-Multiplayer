@@ -35,6 +35,8 @@ usernameInput = $("#nameInput").val().trim();
 $("#nameArea").html("<h3>" + usernameInput + " You are Player 1</h3>");
 $("#nameSpotLeft").html(usernameInput);
 };
+generateChoices();
+talkShitGetHit(usernameInput);
 });
 };
 function generatePlayerNameTwo () {
@@ -51,7 +53,16 @@ $("#nameSpotRight").html(usernameInput);
 };
 });
 };
-
+// This function will control chat
+function talkShitGetHit (user) {
+	var tempvar;
+	$("#chatSubmit").click(function () {
+		tempvar = $("#chatInput").val().trim();
+		console.log(tempvar);
+		$("#chatInput").val("");
+		$(".boxCreate").append("<p>" + user + ":  " + tempvar + "</p>");
+	});
+};
 //
 // This functoin creates the choices on the screen applies and onclick to themand then saves their choice to a variable for comparison.
 function generateChoices () {
@@ -63,13 +74,13 @@ function generateChoices () {
 	console.log(userChoice);
 	switch (userChoice) {
 		case "rock":
-		$(".choicesToShow").html("<img alt='rock' src='images/rock.png' class='img-responsive col-xs-8 col-sm-8 col-md-8 col-lg-8'>")
+		$(".choicesToShow").html("<img alt='rock' src='images/rock.png' class='img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
 		break;
 		case "paper":
-		$(".choicesToShow").html("<img alt='paper' src='images/paper.png' class='img-responsive col-xs-8 col-sm-8 col-md-8 col-lg-8'>")
+		$(".choicesToShow").html("<img alt='paper' src='images/paper.png' class='img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
 		break;
 		case "scissors":
-		$(".choicesToShow").html("<img alt='scissors' src='images/scissors.png' class='img-responsive col-xs-8 col-sm-8 col-md-8 col-lg-8'>")
+		$(".choicesToShow").html("<img alt='scissors' src='images/scissors.png' class='img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
 		break;
 		default:
 		alert("nothing chosen");
@@ -93,8 +104,8 @@ $(document).ready(function(){
 $("#nameSpotLeft").html("Waiting on Other Player");
 $("#nameSpotRight").html("Waiting on Other Player");
 $("#score").html('<p id="keepInPlace">Wins: <span id="wins">0          </span>Losses: <span id="losses">0 </span>       </p>');
+generatePlayerNameOne();
 
-generateChoices();
 
 
 

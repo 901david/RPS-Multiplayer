@@ -40,5 +40,11 @@
 .moveDown {
 	margin-top: 10px;
 }
+#nameSpotRight {
+	white-space: nowrap;
+}
+#nameSpotLeft {
+	white-space: nowrap;
+}
 
 
