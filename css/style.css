@@ -1,3 +1,6 @@
+body {
+	font-family: 'Rock Salt', cursive;
+}
 .topPic {
 	border-bottom: 5px solid black;
 	padding: 0;
@@ -25,8 +28,8 @@
 	font-size: 18px;
 	margin-top: 10px;
 	text-align: center;
-	width: 75px;
-	height: 25px;
+	width: 100px;
+	height: 35px;
 	border:2px solid transparent;
 }
 .choices:hover {
