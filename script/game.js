@@ -31,22 +31,25 @@ function getUserName () {
 	$("#nameSubmission").click(function (){
 		if (($("#nameInput").val().trim()) === "") {
 			usernameInput = defaultUserName;
-			$("#nameArea").empty().append("<p class='headSize'>" + usernameInput + " you are Player 1!");
-			$("#nameSpotLeft").html(usernameInput).addClass("slightlyBigger");
-			$("#scoreOne").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
 			}
 			else {
 			usernameInput = $("#nameInput").val().trim();
-			$("#nameArea").empty();
-			$("#nameArea").empty().append("<p class='headSize'>" + usernameInput + " you are Player 1!");
-			$("#nameSpotLeft").html(usernameInput).addClass("slightlyBigger");
-			$("#scoreOne").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
 			};
 			console.log(usernameInput);
 			shouldWeAddAnother();
+			$("#nameArea").empty().append("<p class='headSize'>" + usernameInput + " you are Player 1!");
+			databaseRefPOne.child("name").on("value", function (snapshot) {
+				console.log(snapshot.val());
+				$("#nameSpotLeft").html(snapshot.val()).addClass("slightlyBigger");
+			}, function (error) {
+			//Handle Error
+			});
+			$("#scoreOne").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
+
 	});
+			
 };
-;
+
 // This function uses basic logic to determine who wins
 function iAmPrettySureIWon () {
 	switch (userChoicePOne) {
@@ -96,6 +99,14 @@ function shouldWeAddAnother () {
 				wins: 0,
 				losses: 0
 				});
+				$("#nameArea").empty().append("<p class='headSize'>" + usernameInput + " you are Player 2!");
+				databaseRefPTwo.child("name").on("value", function (snapshot) {
+				console.log(snapshot.val());
+				$("#nameSpotRight").html(snapshot.val()).addClass("slightlyBigger");
+			}, function (error) {
+			//Handle Error
+			});
+			$("#scoreOne").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
 				}
 				else {
 				alert("Too many players");
@@ -106,7 +117,7 @@ function shouldWeAddAnother () {
 				});	
 };
 // This function will control chat
-function talkShitGetHit (user) {
+function talkShitGetHit () {
 	var tempvar;
 	$("#chatSubmit").click(function () {
 		tempvar = $("#chatInput").val().trim();
@@ -114,11 +125,11 @@ function talkShitGetHit (user) {
 		$("#chatInput").val("");
 		databaseRefChat.on("child_added", function(snapshot) {
 			console.log(snapshot.val());
-					
-		$(".boxCreate").html("<p>" + snapshot.val() + "</p>");	
-		}, function (error) {//Handle Errors});
+			// $(".boxCreate").append("<p>" + snapshot.val() + "</p>");	
+		}, function (error) {//Handle Errors
 		});
-});
+	});
+
 };
 // This function takes the users selection and decides what player gave that input and also where to set on server
 function WhatAndWhereToPush () {
