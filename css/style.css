@@ -39,6 +39,7 @@ body {
 .boxCreate {
 	border: 2px solid black;
 	height: 150px;
+	overflow: scroll;
 }
 .moveDown {
 	margin-top: 10px;
@@ -49,5 +50,13 @@ body {
 #nameSpotLeft {
 	white-space: nowrap;
 }
-
-
+.headSize {
+	font-size: 28px;
+}
+.slightlyBigger {
+	font-size: 18px;
+}
+.yourTurn {
+	border:10px solid yellow;
+	box-shadow: 12px 12px;
+}
