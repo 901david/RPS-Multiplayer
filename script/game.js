@@ -110,11 +110,12 @@ function talkShitGetHit (user) {
 	var tempvar;
 	$("#chatSubmit").click(function () {
 		tempvar = $("#chatInput").val().trim();
-		databaseRefChat.push(tempvar);
+		databaseRefChat.push(usernameInput + ": " + tempvar);
 		$("#chatInput").val("");
-		databaseRefChat.once("value", function(snapshot) {
-			console.log(snapshot.val())
-		$(".boxCreate").html("<p>" + usernameInput + ":  " + snapshot.val() + "</p>");	
+		databaseRefChat.on("child_added", function(snapshot) {
+			console.log(snapshot.val());
+					
+		$(".boxCreate").html("<p>" + snapshot.val() + "</p>");	
 		}, function (error) {//Handle Errors});
 		});
 });
