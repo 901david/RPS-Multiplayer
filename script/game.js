@@ -92,6 +92,7 @@ function shouldWeAddAnother () {
 				losses: 0
 				});
 				databaseRefUserGuessed.set({chose: false});
+
 				}
 				else if (!(snapshot.child("Two").exists())) {
 				databaseRefPTwo.set({
@@ -99,10 +100,12 @@ function shouldWeAddAnother () {
 				wins: 0,
 				losses: 0
 				});
-				$("#nameArea").empty().append("<p class='headSize'>" + usernameInput + " you are Player 2!");
+
+				
 				databaseRefPTwo.child("name").on("value", function (snapshot) {
-				console.log(snapshot.val());
-				$("#nameSpotRight").html(snapshot.val()).addClass("slightlyBigger");
+				// $("#nameArea").empty().append("<p class='headSize'>" + snapshot.val() + " you are Player 2!");
+				// console.log(snapshot.val());
+				// $("#nameSpotRight").html(snapshot.val()).addClass("slightlyBigger");
 			}, function (error) {
 			//Handle Error
 			});
@@ -123,13 +126,11 @@ function talkShitGetHit () {
 		tempvar = $("#chatInput").val().trim();
 		databaseRefChat.push(usernameInput + ": " + tempvar);
 		$("#chatInput").val("");
+	});
 		databaseRefChat.on("child_added", function(snapshot) {
-			console.log(snapshot.val());
-			// $(".boxCreate").append("<p>" + snapshot.val() + "</p>");	
+			$(".boxCreate").append("<p>" + snapshot.val() + "</p>");	
 		}, function (error) {//Handle Errors
 		});
-	});
-
 };
 // This function takes the users selection and decides what player gave that input and also where to set on server
 function WhatAndWhereToPush () {
