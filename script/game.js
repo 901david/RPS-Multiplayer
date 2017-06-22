@@ -50,13 +50,13 @@ function getUserName () {
 			});	
 			$("#scoreOne").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
 		}
-		if ((playerOne === 1) && (playerTwo === 2)) {
-			databaseRefPTwo.child("name").on("value", function (snapshot) {
-				addPlayerTwoName();
-			}, function (error) {
-				alert("Ouchie...something in this program had a boo  boo.");
-			});
-		};
+		// if ((playerOne === 1) && (playerTwo === 2)) {
+		// 	databaseRefPTwo.child("name").on("value", function (snapshot) {
+		// 		addPlayerTwoName();
+		// 	}, function (error) {
+		// 		alert("Ouchie...something in this program had a boo  boo.");
+		// 	});
+		// };
 
 	});
 
@@ -105,7 +105,6 @@ function shouldWeAddAnother () {
 function addPlayerTwoName () {
 	databaseRefPTwo.child("name").on("value", function (snapshot) {
 		$("#nameArea").empty().append("<p class='headSize'>" + snapshot.val() + " you are Player 2!");
-		
 	}, function (error) {
 			//Handle Error
 		});
@@ -245,6 +244,7 @@ function generateChoices () {
 					});
 				}
 				if (playerTwo === 2) {
+					addPlayerTwoName();
 					$("#choicesToShowOne").empty();
 					$("#choicesToShowTwo").html(choicesToShowTwo);
 					$("#scoreTwo").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
@@ -315,6 +315,13 @@ function talkShitGetHit () {
 		});
 };
 $(document).ready(function(){
+	// For testing purposes only
+	$("#disconnect").on("click", function () {
+		databaseRefPlayer.remove();
+	});
+
+
+
 	databaseRefPTwo.child("name").on("value", function (snapshot) {
 		$("#nameSpotRight").html(snapshot.val()).addClass("slightlyBigger");
 	}, function (error) {
