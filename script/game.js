@@ -41,6 +41,7 @@ function getUserName () {
 		console.log(usernameInput);
 		shouldWeAddAnother();
 		if (playerOne === 1) {
+			talkShitGetHit();
 			$("#nameArea").empty().append("<p class='headSize'>" + usernameInput + " you are Player 1!");
 			databaseRefPOne.child("name").on("value", function (snapshot) {
 				console.log(snapshot.val());
@@ -50,14 +51,6 @@ function getUserName () {
 			});	
 			$("#scoreOne").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
 		}
-		// if ((playerOne === 1) && (playerTwo === 2)) {
-		// 	databaseRefPTwo.child("name").on("value", function (snapshot) {
-		// 		addPlayerTwoName();
-		// 	}, function (error) {
-		// 		alert("Ouchie...something in this program had a boo  boo.");
-		// 	});
-		// };
-
 	});
 
 };
@@ -104,6 +97,7 @@ function shouldWeAddAnother () {
 // This function will change the Dom independently while players make a choice.....hopefully
 function addPlayerTwoName () {
 	databaseRefPTwo.child("name").on("value", function (snapshot) {
+		talkShitGetHit();
 		$("#nameArea").empty().append("<p class='headSize'>" + snapshot.val() + " you are Player 2!");
 	}, function (error) {
 			//Handle Error
@@ -232,6 +226,7 @@ function generateChoices () {
 			if ((snapshot.child("One").exists()) && (snapshot.child("Two").exists())) {
 				$("#middleBox").html("<img class='img-responsive' src='images/hand-motion.gif'>");
 				if (playerOne === 1){
+					
 					var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
 					$("#choicesToShowOne").html(choicesToShowOne);
 					$(".choices").on("click", function () {
@@ -245,6 +240,7 @@ function generateChoices () {
 				}
 				if (playerTwo === 2) {
 					addPlayerTwoName();
+					
 					$("#choicesToShowOne").empty();
 					$("#choicesToShowTwo").html(choicesToShowTwo);
 					$("#scoreTwo").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
@@ -334,7 +330,6 @@ $(document).ready(function(){
 		});
 	getUserName();
 	generateChoices();
-	talkShitGetHit();
 });
 
 
