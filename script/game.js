@@ -25,7 +25,8 @@ var usernameInput; //Name user enters
 var defaultUserName = "Guest"; //Default username if not name is entered
 var wins = 0; //Wins starts at 0
 var losses = 0; //Losses start at 0
-var playerOneChose = false; //This will be used and eventually pushed to server to determine what to display on the screen
+var playerOneChose = false;
+var playerTwoChose = false; //This will be used and eventually pushed to server to determine what to display on the screen
 var playerOne = 0;
 var playerTwo = 0;
 var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
@@ -46,6 +47,11 @@ function getUserName () {
 			$("#nameArea").append('<button id="disconnectOne" class="btn btn-danger">Disconnect</button>');
 			$("#disconnectOne").on("click", function () {
 				databaseRefPOne.remove();
+				playerOne = 0;
+				resetIfDisconnect();
+				$("#nameArea").html('<input type="text" id="nameInput" placeholder="Enter name"><button id="nameSubmission" class="btn btn-danger">Submit</button>');
+				getUserName();
+				
 			});
 
 			databaseRefPOne.child("name").on("value", function (snapshot) {
@@ -58,6 +64,16 @@ function getUserName () {
 		}
 	});
 
+};
+// This function will reset the game if someone disconnects
+function resetIfDisconnect () {
+	playerOneChose = false;
+	playerTwoChose = false;
+	$("#choicesToShowOne").empty();
+	$("#choicesToShowTwo").empty();
+	$("#middleBox").empty();
+	$("#scoreOne").empty();
+	$("#scoreTwo").empty();
 };
 // Determines if we have two players or not btu does not allow 3 or more
 function shouldWeAddAnother () {
@@ -107,6 +123,10 @@ function addPlayerTwoName () {
 		$("#nameArea").append('<button id="disconnectTwo" class="btn btn-danger">Disconnect</button>');
 		$("#disconnectTwo").on("click", function () {
 			databaseRefPTwo.remove();
+			playerTwo = 0;
+			resetIfDisconnect();
+			$("#nameArea").html('<input type="text" id="nameInput" placeholder="Enter name"><button id="nameSubmission" class="btn btn-danger">Submit</button>');
+			getUserName();
 		});
 	}, function (error) {
 			//Handle Error
