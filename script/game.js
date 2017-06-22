@@ -43,6 +43,11 @@ function getUserName () {
 		if (playerOne === 1) {
 			talkShitGetHit();
 			$("#nameArea").empty().append("<p class='headSize'>" + usernameInput + " you are Player 1!");
+			$("#nameArea").append('<button id="disconnectOne" class="btn btn-danger">Disconnect</button>');
+			$("#disconnectOne").on("click", function () {
+				databaseRefPOne.remove();
+			});
+
 			databaseRefPOne.child("name").on("value", function (snapshot) {
 				console.log(snapshot.val());
 				$("#nameSpotLeft").html(snapshot.val()).addClass("slightlyBigger");
@@ -99,6 +104,10 @@ function addPlayerTwoName () {
 	databaseRefPTwo.child("name").on("value", function (snapshot) {
 		talkShitGetHit();
 		$("#nameArea").empty().append("<p class='headSize'>" + snapshot.val() + " you are Player 2!");
+		$("#nameArea").append('<button id="disconnectTwo" class="btn btn-danger">Disconnect</button>');
+		$("#disconnectTwo").on("click", function () {
+			databaseRefPTwo.remove();
+		});
 	}, function (error) {
 			//Handle Error
 		});
@@ -254,6 +263,7 @@ function generateChoices () {
 					});
 				}
 
+
 							
 			}
 		}), function (error) {alert("OOPS -- Something went wrong");
@@ -315,6 +325,8 @@ $(document).ready(function(){
 	$("#disconnect").on("click", function () {
 		databaseRefPlayer.remove();
 	});
+	
+	
 
 
 
