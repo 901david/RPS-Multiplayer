@@ -61,3 +61,6 @@ body {
 	border:10px solid yellow;
 	box-shadow: 12px 12px;
 }
+#disconnectOne {
+	text-align: center;
+}
