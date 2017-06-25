@@ -64,3 +64,6 @@ body {
 #disconnectOne {
 	text-align: center;
 }
+.hide {
+	display: hidden;
+}
