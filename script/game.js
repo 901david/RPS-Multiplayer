@@ -502,7 +502,7 @@ $(document).ready(function() {
             generateChoices();
             keepScore();
             showImages();
-            haveSelectionsBeenMade();
+            // haveSelectionsBeenMade();
 
            
 
