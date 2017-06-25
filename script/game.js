@@ -322,16 +322,7 @@ function whichOneTakesIt () {
         }
     }
 };
-// This will combined some functions toogether to listen to the server and determine who wins.
-function iAmPrettySureIWon() {
-        listenUp();
-    if ((playOneChose === true) && (playTwoChose === true)) {
-        whatDidYouPickOne(userChoicePOne);
-        whatDidYouPickTwo(userChoicePTwo);
-        whichOneTakesIt();
-        console.log("made it to choose");  
-    } 
-};
+
 // This function will generate the choices on the screen and then call another function to determine what to send off.
 function generateChoices () {
 	databaseRefPlayer.on("child_added", function (snapshot) {
@@ -474,8 +465,8 @@ function playerOneJoined () {
             });
             userChoice = $(this).attr("data-choice");
             userData = $(this).attr("data-player");
-            $("#choicesToShowOne").html("<p>Waiting on Other Player.</p>");
             WhatAndWhereToPush();
+            iAmPrettySureIWon();
 
 
         });
@@ -494,8 +485,8 @@ function playerTwoJoined () {
             });
             userChoice = $(this).attr("data-choice");
             userData = $(this).attr("data-player");
-            $("#choicesToShowTwo").html("<p>Waiting on Other Player.</p>");
             WhatAndWhereToPush();
+            iAmPrettySureIWon();
 
         });
     }
