@@ -19,6 +19,10 @@ var databaseRefUserGuessTwo = firebase.database().ref("/Player/Two/userGuess");
 var databaseRefUserGuessedTwo = firebase.database().ref("/Player/Two/userGuessed");
 
 // Definition of Variables
+var userChoicePOne;
+var userChoicePTwo;
+var shouldDisplayOne;
+var shouldDisplayTwo;
 var userChoice; //Choice made R, P, S
 var usernameInput; //Name user enters
 var defaultUserName = "Guest"; //Default username if not name is entered
@@ -28,7 +32,9 @@ var playerOneChose = false;
 var playerTwoChose = false; //This will be used and eventually pushed to server to determine what to display on the screen
 var playerOne = 0;
 var playerTwo = 0;
-var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
+var playOneChose;
+var playTwoChose;
+var userTwoScore;
 // This simply grabs the username input and sets it to a variable -than calls the function to determine if anotehr player should be added.
 function getUserName() {
     $("#nameSubmission").click(function() {
@@ -133,21 +139,18 @@ function addPlayerTwoName() {
     });
 
 };
-// This function uses basic logic to determine who wins
-function iAmPrettySureIWon() {
-    var userChoicePOne;
-    var userChoicePTwo;
-    var playOneChose;
-    var playTwoChose;
-    var userTwoScore;
+// This function will listen to the server and save some variables for me.
+function listenUp () {
     databaseRefUserGuessOne.child("choice").on("value", function(snapshot) {
             userChoicePOne = snapshot.val();
+            console.log("User 1 CHoice: " + userChoicePOne);
         },
         function(error) {
             alert("Oops we have an issue.....")
         });
     databaseRefUserGuessTwo.child("choice").on("value", function(snapshot) {
             userChoicePTwo = snapshot.val();
+            console.log("User 2 CHoice: " + userChoicePTwo);
         },
         function(error) {
             alert("Oops we have an issue.....")
@@ -161,179 +164,63 @@ function iAmPrettySureIWon() {
         });
     databaseRefUserGuessedTwo.child("chose").on("value", function(snapshot) {
             playTwoChose = snapshot.val();
+            console.log("Player One Has Chosen? " + playTwoChose)
         },
         function(error) {
             alert("Oops we have an issue.....")
         });
-    // How can I replicate this below on other screen???
+};
+// This function uses basic logic to determine who wins
+function whichOneTakesIt () {
+    if (userChoicePOne === "rock") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+                
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+        } 
+        else {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+        }
+    }
+    else if (userChoicePOne === "paper") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+        } 
+        else {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+        }
+    }
+    else if (userChoicePOne === "scissors") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+        } 
+        else {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+        }
+    }
+};
+// This will combined some functions toogether to listen to the server and determine who wins.
+function iAmPrettySureIWon() {
+        listenUp();
     if ((playOneChose === true) && (playTwoChose === true)) {
         whatDidYouPickOne(userChoicePOne);
         whatDidYouPickTwo(userChoicePTwo);
-        if (userChoicePOne === "rock") {
+        whichOneTakesIt();
+        console.log("made it to choose");  
+    } 
+};
 
-            if (userChoicePTwo === "rock") {
-                $("#middleBox").append("<h3>You Tied!</h3>");
-                setInterval(function() {
-                    bringThemBack();
-                }, 5000);
-            } else if (userChoicePTwo === "paper") {
-                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
-                databaseRefPTwo.child("wins").on("value", function(snapshot) {
-                    console.log(snapshot.val());
-                    if (snapshot.val() === 0) {
-                        databaseRefPTwo.child("wins").set({
-                            wins: 1
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    } else {
-                        var xvar = snapshot.val() += 1;
-                        databaseRefPTwo.child("wins").set({
-                            wins: xvar
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    }
-                }, function(errorObject) {
-                    console.log("The read failed.");
-                });
 
-            } else {
-                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
-                databaseRefPOne.child("wins").on("value", function(snapshot) {
-                    console.log(snapshot.val());
-                    if (snapshot.val() === 0) {
-                        databaseRefPOne.child("wins").set({
-                            wins: 1
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    } else {
-                        var xvar = snapshot.val() += 1;
-                        databaseRefPOne.child("wins").set({
-                            wins: xvar
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    }
-                }, function(errorObject) {
-                    console.log("The read failed.");
-                });
-            };
-        } else if (userChoicePOne === "paper") {
-            if (userChoicePTwo === "rock") {
-                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
-                databaseRefPOne.child("wins").on("value", function(snapshot) {
-                    console.log(snapshot.val());
-                    if (snapshot.val() === 0) {
-                        databaseRefPOne.child("wins").set({
-                            wins: 1
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    } else {
-                        var xvar = snapshot.val() += 1;
-                        databaseRefPOne.child("wins").set({
-                            wins: xvar
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    }
-                }, function(errorObject) {
-                    console.log("The read failed.");
-                });
-            } else if (userChoicePTwo === "paper") {
-                $("#middleBox").append("<h3>You Tied!</h3>");
-                setInterval(function() {
-                    bringThemBack();
-                }, 5000);
-            } else {
-                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
-                databaseRefPTwo.child("wins").on("value", function(snapshot) {
-                    console.log(snapshot.val());
-                    if (snapshot.val() === 0) {
-                        databaseRefPTwo.child("wins").set({
-                            wins: 1
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    } else {
-                        var xvar = snapshot.val() += 1;
-                        databaseRefPTwo.child("wins").set({
-                            wins: xvar
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    }
-                }, function(errorObject) {
-                    console.log("The read failed.");
-                });
-            };
-        } else if (userChoicePOne === "scissors") {
-            if (userChoicePTwo === "rock") {
-                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
-                databaseRefPTwo.child("wins").on("value", function(snapshot) {
-                    console.log(snapshot.val());
-                    if (snapshot.val() === 0) {
-                        databaseRefPTwo.child("wins").set({
-                            wins: 1
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    } else {
-                        var xvar = snapshot.val() += 1;
-                        databaseRefPTwo.child("wins").set({
-                            wins: xvar
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    }
-                }, function(errorObject) {
-                    console.log("The read failed.");
-                });
-            } else if (userChoicePTwo === "paper") {
-                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
-                databaseRefPOne.child("wins").on("value", function(snapshot) {
-                    console.log(snapshot.val());
-                    if (snapshot.val() === 0) {
-                        databaseRefPOne.child("wins").set({
-                            wins: 1
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    } else {
-                        var xvar = snapshot.val() += 1;
-                        databaseRefPOne.child("wins").set({
-                            wins: xvar
-                        });
-                        setInterval(function() {
-                            bringThemBack();
-                        }, 5000);
-                    }
-                }, function(errorObject) {
-                    console.log("The read failed.");
-                });
-            }
-        } else {
-            $("#middleBox").append("<h3>You Tied!</h3>");
-            setInterval(function() {
-                bringThemBack();
-            }, 5000);
-        };
-
-        // This function takes the users selection and decides what player gave that input and also where to set on server
-        function WhatAndWhereToPush() {
+ // This function takes the users selection and decides what player gave that input and also where to set on server
+function WhatAndWhereToPush() {
             switch (userChoice) {
                 case "rock":
                     if (userData === "One") {
@@ -371,9 +258,9 @@ function iAmPrettySureIWon() {
                 default:
                     alert("nothing chosen");
             }
-        };
-        // This function will allow regeneration of choices
-        function bringThemBack() {
+};
+// This function will allow regeneration of choices
+function bringThemBack() {
             $("#choicesToShowOne").empty();
             $("#choicesToShowTwo").empty();
             databaseRefUserGuessedOne.set(false);
@@ -419,58 +306,58 @@ function iAmPrettySureIWon() {
             }, function(error) {
                 alert("OOPS -- Something went wrong");
             });
-        };
-        // This function will generate the choices on the screen and then call another function to determine what to send off.
-        function generateChoices() {
-            databaseRefPlayer.on("child_added", function(snapshot) {}, function (error) {alert("OOPS -- Something went wrong");});};
-            
+};
+function playerOneJoined () {
+    if (playerOne === 1) {
+        var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
+        $("#choicesToShowOne").html(choicesToShowOne);
+        $(".choices").on("click", function() {
+            databaseRefUserGuessedOne.set({
+                chose: true
+            });
+            userChoice = $(this).attr("data-choice");
+            userData = $(this).attr("data-player");
+            $("#choicesToShowOne").html("<p>Waiting on Other Player.</p>");
+            WhatAndWhereToPush();
+
+
+        });
+    }
+};
+function playerTwoJoined () {
+    if (playerTwo === 2) {
+        var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
+        addPlayerTwoName();
+        $("#choicesToShowOne").empty();
+        $("#choicesToShowTwo").html(choicesToShowTwo);
+        $("#scoreTwo").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
+        $(".choices").on("click", function() {
+            databaseRefUserGuessedTwo.set({
+                chose: true
+            });
+            userChoice = $(this).attr("data-choice");
+            userData = $(this).attr("data-player");
+            $("#choicesToShowTwo").html("<p>Waiting on Other Player.</p>");
+            WhatAndWhereToPush();
+
+        });
+    }
+};
+// This function will generate the choices on the screen and then call another function to determine what to send off.
+function generateChoices() {
+            databaseRefPlayer.on("child_added", function(snapshot) {
                 databaseRefPlayer.once("value", function(snapshot) {
                         if ((snapshot.child("One").exists()) && (snapshot.child("Two").exists())) {
                             $("#middleBox").html("<img class='img-responsive' src='images/hand-motion.gif'>");
-                            if (playerOne === 1) {
-                                var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
-                                $("#choicesToShowOne").html(choicesToShowOne);
-                                $(".choices").on("click", function() {
-                                    databaseRefUserGuessedOne.set({
-                                        chose: true
-                                    });
-                                    userChoice = $(this).attr("data-choice");
-                                    userData = $(this).attr("data-player");
-                                    $("#choicesToShowOne").html("<p>Waiting on Other Player.</p>");
-                                    WhatAndWhereToPush();
-
-                                });
-                            }
-                            if (playerTwo === 2) {
-                                addPlayerTwoName();
-                                $("#choicesToShowOne").empty();
-                                $("#choicesToShowTwo").html(choicesToShowTwo);
-                                $("#scoreTwo").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
-                                $(".choices").on("click", function() {
-                                    databaseRefUserGuessedTwo.set({
-                                        chose: true
-                                    });
-                                    userChoice = $(this).attr("data-choice");
-                                    userData = $(this).attr("data-player");
-                                    WhatAndWhereToPush();
-
-                                });
-                            }
-                        };
-                    },
-                    function(error) {
-                        alert("OOPS -- Something went wrong");
-                    });
-                 
-
-
-
-        
-       
-
-
-        // This function determines when to show what the players chose and then tell who won
-        function whatDidYouPickOne(x) {
+                            playerOneJoined ();
+                            playerTwoJoined();
+                        
+                        }
+                });
+            });
+};
+// This function determines when to show what the players chose and then tell who won
+function whatDidYouPickOne(x) {
             switch (x) {
                 case "rock":
                     $("#choicesToShowOne").html("<img alt='rock' src='images/rock.png' class='img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
@@ -485,9 +372,9 @@ function iAmPrettySureIWon() {
                     alert("nothing chosen");
             }
             $("#middleBox").empty();
-        }
+};
 
-        function whatDidYouPickTwo(y) {
+function whatDidYouPickTwo(y) {
             switch (y) {
                 case "rock":
                     $("#choicesToShowTwo").html("<img alt='rock' src='images/rock.png' class='img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
@@ -502,9 +389,9 @@ function iAmPrettySureIWon() {
                     alert("nothing chosen");
             }
             $("#middleBox").empty();
-        }
-        // This function will control chat
-        function talkShitGetHit() {
+};
+// This function will control chat
+function talkShitGetHit() {
             var tempvar;
             $("#clearSubmit").click(function() {
                 databaseRefChat.remove();
@@ -519,8 +406,8 @@ function iAmPrettySureIWon() {
                 $(".boxCreate").append("<p>" + snapshot.val() + "</p>");
             }, function(error) { //Handle Errors
             });
-        };
-        $(document).ready(function() {
+};
+$(document).ready(function() {
             // For testing purposes only
             $("#disconnect").on("click", function() {
                 databaseRefPlayer.remove();
@@ -544,18 +431,28 @@ function iAmPrettySureIWon() {
             });
             getUserName();
             generateChoices();
-            // databaseRefUserGuessedTwo.on("value", function (snapshot) {
-            //  // Set variable to snap shot 
-            // }, function (error) {
-            //  alert("Oops looks like we srewed up.");
-            // });
-            // databaseRefUserGuessedOne.on("value", function (snapshot) {
-            //  // Set variable to snapshot
-            // }, function (error) {
-            //  alert("Oops looks like we srewed up.");
-            // });
-            // Compare variables if both true then Show the choices and who won here instead
-            // whatDidYouPickOne(userChoice);
+            // databaseRefUserGuessedTwo.child("chose").on("value", function (snapshot) {
+            //     console.log(snapshot.val());
+            //  shouldDisplayTwo = snapshot.val();
+            //  if ((shouldDisplayOne === true) && (shouldDisplayTwo === true)) {
+            // whatDidYouPickOne();
+            // whatDidYouPickTwo();
             // iAmPrettySureIWon();
+            // }; 
+            // }, function (error) {
+            //  alert("Oops looks like we srewed up.");
+            // });
+            // databaseRefUserGuessedOne.child("chose").on("value", function (snapshot) {
+            //  shouldDisplayOne = snapshot.val();
+            //  console.log(snapshot.val());
+            //  if ((shouldDisplayOne === true) && (shouldDisplayTwo === true)) {
+            // whatDidYouPickOne();
+            // whatDidYouPickTwo();
+            // iAmPrettySureIWon();
+            // };
+            // }, function (error) {
+            //  alert("Oops looks like we srewed up.");
+            // });
+            
 
-        });
+});
