@@ -8,15 +8,20 @@ var config = {
     messagingSenderId: "401672091861"
 };
 firebase.initializeApp(config);
-// Firebase Refs I want to u
-var databaseRefPlayer = firebase.database().ref("/Player");
-var databaseRefPOne = firebase.database().ref("/Player/One");
-var databaseRefPTwo = firebase.database().ref("/Player/Two");
-var databaseRefChat = firebase.database().ref("/Chat");
-var databaseRefUserGuessedOne = firebase.database().ref("/Player/One/userGuessed");
-var databaseRefUserGuessOne = firebase.database().ref("/Player/One/userGuess");
-var databaseRefUserGuessTwo = firebase.database().ref("/Player/Two/userGuess");
-var databaseRefUserGuessedTwo = firebase.database().ref("/Player/Two/userGuessed");
+
+  // Firebase Refs I want to use
+  var databaseRef = firebase.database();
+  var databaseRefPlayer = firebase.database().ref("/Player");
+  var databaseRefPOne = firebase.database().ref("/Player/One");
+  var databaseRefPTwo = firebase.database().ref("/Player/Two");
+  var databaseRefPOneWins = firebase.database().ref("/Player/One/wins");
+  var databaseRefPTwoWins = firebase.database().ref("/Player/Two/wins");
+  var databaseRefChat = firebase.database().ref("/Chat");
+  var databaseRefUserGuessedOne = firebase.database().ref("/Player/One/userGuessed");
+  var databaseRefUserGuessOne = firebase.database().ref("/Player/One/userGuess");
+  var databaseRefUserGuessTwo = firebase.database().ref("/Player/Two/userGuess");
+  var databaseRefUserGuessedTwo = firebase.database().ref("/Player/Two/userGuessed");
+
 
 // Definition of Variables
 var userChoicePOne;
@@ -32,9 +37,13 @@ var playerOneChose = false;
 var playerTwoChose = false; //This will be used and eventually pushed to server to determine what to display on the screen
 var playerOne = 0;
 var playerTwo = 0;
+var userChoicePOne;
+var userChoicePTwo;
 var playOneChose;
 var playTwoChose;
 var userTwoScore;
+
+
 // This simply grabs the username input and sets it to a variable -than calls the function to determine if anotehr player should be added.
 function getUserName() {
     $("#nameSubmission").click(function() {
@@ -121,23 +130,129 @@ function shouldWeAddAnother() {
 };
 
 // This function will change the Dom independently while players make a choice.....hopefully
-function addPlayerTwoName() {
-    databaseRefPTwo.child("name").on("value", function(snapshot) {
-        talkShitGetHit();
-        $("#nameArea").empty().append("<p class='headSize'>" + snapshot.val() + " you are Player 2!");
-        $("#scoreOne").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
-        $("#nameArea").append('<button id="disconnectTwo" class="btn btn-danger">Disconnect</button>');
-        $("#disconnectTwo").on("click", function() {
-            databaseRefPTwo.remove();
-            playerTwo = 0;
-            resetIfDisconnect();
-            $("#nameArea").html('<input type="text" id="nameInput" placeholder="Enter name"><button id="nameSubmission" class="btn btn-danger">Submit</button>');
-            getUserName();
+function addPlayerTwoName () {
+	databaseRefPTwo.child("name").on("value", function (snapshot) {
+		talkShitGetHit();
+		$("#nameArea").empty().append("<p class='headSize'>" + snapshot.val() + " you are Player 2!");
+		$("#nameArea").append('<button id="disconnectTwo" class="btn btn-danger">Disconnect</button>');
+		$("#disconnectTwo").on("click", function () {
+			databaseRefPTwo.remove();
+			playerTwo = 0;
+			resetIfDisconnect();
+			$("#nameArea").html('<input type="text" id="nameInput" placeholder="Enter name"><button id="nameSubmission" class="btn btn-danger">Submit</button>');
+			getUserName();
+		});
+	}, function (error) {
+			//Handle Error
+		});
+	
+};
+// This function will listen to the server and save some variables for me.
+function listenUp () {
+    databaseRefUserGuessOne.child("choice").on("value", function(snapshot) {
+            userChoicePOne = snapshot.val();
+            console.log("User 1 CHoice: " + userChoicePOne);
+        },
+        function(error) {
+            alert("Oops we have an issue.....")
         });
-    }, function(error) {
-        //Handle Error
-    });
-
+    databaseRefUserGuessTwo.child("choice").on("value", function(snapshot) {
+            userChoicePTwo = snapshot.val();
+            console.log("User 2 CHoice: " + userChoicePTwo);
+        },
+        function(error) {
+            alert("Oops we have an issue.....")
+        });
+    databaseRefUserGuessedOne.child("chose").on("value", function(snapshot) {
+            playOneChose = snapshot.val();
+            console.log("Player One Has Chosen? " + playOneChose)
+        },
+        function(error) {
+            alert("Oops we have an issue.....")
+        });
+    databaseRefUserGuessedTwo.child("chose").on("value", function(snapshot) {
+            playTwoChose = snapshot.val();
+            console.log("Player One Has Chosen? " + playTwoChose)
+        },
+        function(error) {
+            alert("Oops we have an issue.....")
+        });
+};
+// This function uses basic logic to determine who wins
+function whichOneTakesIt () {
+    if (userChoicePOne === "rock") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+                
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+                playerTwoWon ();
+        } 
+        else {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+                playerOneWon ();
+        }
+    }
+    else if (userChoicePOne === "paper") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+                playerOneWon ();
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+        } 
+        else {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+                playerTwoWon ();
+        }
+    }
+    else if (userChoicePOne === "scissors") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+                playerTwoWon ();
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+                playerOneWon ();
+        } 
+        else {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+        }
+    }
+};
+// This listen for players 2 wins and modifies
+function playerTwoWon () {
+    databaseRefPTwoWins.once("value", function(snapshot) {
+        console.log("Two WIns: " + snapshot.val());
+        var xvar = snapshot.val();
+        xvar += 1;
+            databaseRefPTwoWins.set(xvar);
+    
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
+};
+// This listen for players 2 wins and modifies
+function playerOneWon () {
+    databaseRefPOneWins.once("value", function(snapshot) {
+        console.log(snapshot.val());
+        var xvar = snapshot.val();
+        xvar += 1;
+            databaseRefPOneWins.set(xvar);
+    
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
+};
+// This function uses basic logic to determine who wins
+function iAmPrettySureIWon () {
+	listenUp();
+    if ((playOneChose === true) && (playTwoChose === true)) {
+		whatDidYouPickOne(userChoicePOne);
+		whatDidYouPickTwo(userChoicePTwo);
+        whichOneTakesIt();
+	}	
 };
 // This function will listen to the server and save some variables for me.
 function listenUp () {
@@ -217,6 +332,48 @@ function iAmPrettySureIWon() {
         console.log("made it to choose");  
     } 
 };
+// This function will generate the choices on the screen and then call another function to determine what to send off.
+function generateChoices () {
+	databaseRefPlayer.on("child_added", function (snapshot) {
+		databaseRefPlayer.once("value", function (snapshot) {
+			if ((snapshot.child("One").exists()) && (snapshot.child("Two").exists())) {
+				$("#middleBox").html("<img class='img-responsive' src='images/hand-motion.gif'>");
+				if (playerOne === 1){
+					var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
+					$("#choicesToShowOne").html(choicesToShowOne);
+					$(".choices").on("click", function () {
+						databaseRefUserGuessedOne.set({chose: true });
+						userChoice = $(this).attr("data-choice");
+						userData = $(this).attr("data-player");
+						WhatAndWhereToPush();
+						whatDidYouPickOne(userChoice);
+						iAmPrettySureIWon();	
+					});
+				}
+				if (playerTwo === 2) {
+                    var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
+					addPlayerTwoName();
+					$("#choicesToShowOne").empty();
+					$("#choicesToShowTwo").html(choicesToShowTwo);
+					$("#scoreTwo").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
+					$(".choices").on("click", function () {
+						databaseRefUserGuessedTwo.set({chose: true });
+						userChoice = $(this).attr("data-choice");
+						userData = $(this).attr("data-player");
+						WhatAndWhereToPush();
+						whatDidYouPickTwo(userChoice);
+						iAmPrettySureIWon();	
+					});
+				}
+            }
+        }, function(error) {
+
+        });
+    }, function (error) {
+
+    });
+};
+
 
 
  // This function takes the users selection and decides what player gave that input and also where to set on server
