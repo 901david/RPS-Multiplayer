@@ -291,33 +291,8 @@ function generateChoices () {
 		databaseRefPlayer.once("value", function (snapshot) {
 			if ((snapshot.child("One").exists()) && (snapshot.child("Two").exists())) {
 				$("#middleBox").html("<img class='img-responsive' src='images/hand-motion.gif'>");
-				if (playerOne === 1){
-					var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
-					$("#choicesToShowOne").html(choicesToShowOne);
-					$(".choices").on("click", function () {
-						databaseRefUserGuessedOne.set({chose: true });
-						userChoice = $(this).attr("data-choice");
-						userData = $(this).attr("data-player");
-						WhatAndWhereToPush();
-						whatDidYouPickOne(userChoice);
-						iAmPrettySureIWon();	
-					});
-				}
-				if (playerTwo === 2) {
-                    var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
-					addPlayerTwoName();
-					$("#choicesToShowOne").empty();
-					$("#choicesToShowTwo").html(choicesToShowTwo);
-					$("#scoreTwo").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
-					$(".choices").on("click", function () {
-						databaseRefUserGuessedTwo.set({chose: true });
-						userChoice = $(this).attr("data-choice");
-						userData = $(this).attr("data-player");
-						WhatAndWhereToPush();
-						whatDidYouPickTwo(userChoice);
-						iAmPrettySureIWon();	
-					});
-				}
+				playerOneJoined ();
+				playerTwoJoined ();
             }
         }, function(error) {
 
@@ -428,6 +403,7 @@ function playerOneJoined () {
             userChoice = $(this).attr("data-choice");
             userData = $(this).attr("data-player");
             WhatAndWhereToPush();
+            whatDidYouPickTwo(userChoice);
             iAmPrettySureIWon();
 
 
@@ -448,6 +424,7 @@ function playerTwoJoined () {
             userChoice = $(this).attr("data-choice");
             userData = $(this).attr("data-player");
             WhatAndWhereToPush();
+            whatDidYouPickTwo(userChoice);
             iAmPrettySureIWon();
 
         });
