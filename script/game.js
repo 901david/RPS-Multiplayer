@@ -13,6 +13,8 @@ firebase.initializeApp(config);
   var databaseRefPlayer = firebase.database().ref("/Player");
   var databaseRefPOne = firebase.database().ref("/Player/One");
   var databaseRefPTwo = firebase.database().ref("/Player/Two");
+  var databaseRefPOneWins = firebase.database().ref("/Player/One/wins");
+  var databaseRefPTwoWins = firebase.database().ref("/Player/Two/wins");
   var databaseRefChat = firebase.database().ref("/Chat");
   var databaseRefUserGuessedOne = firebase.database().ref("/Player/One/userGuessed");
   var databaseRefUserGuessOne = firebase.database().ref("/Player/One/userGuess");
@@ -29,7 +31,12 @@ var playerOneChose = false;
 var playerTwoChose = false; //This will be used and eventually pushed to server to determine what to display on the screen
 var playerOne = 0;
 var playerTwo = 0;
-var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
+var userChoicePOne;
+var userChoicePTwo;
+var playOneChose;
+var playTwoChose;
+var userTwoScore;
+
 // This simply grabs the username input and sets it to a variable -than calls the function to determine if anotehr player should be added.
 function getUserName () {
 	$("#nameSubmission").click(function (){
@@ -134,154 +141,112 @@ function addPlayerTwoName () {
 		});
 	
 };
+// This function will listen to the server and save some variables for me.
+function listenUp () {
+    databaseRefUserGuessOne.child("choice").on("value", function(snapshot) {
+            userChoicePOne = snapshot.val();
+            console.log("User 1 CHoice: " + userChoicePOne);
+        },
+        function(error) {
+            alert("Oops we have an issue.....")
+        });
+    databaseRefUserGuessTwo.child("choice").on("value", function(snapshot) {
+            userChoicePTwo = snapshot.val();
+            console.log("User 2 CHoice: " + userChoicePTwo);
+        },
+        function(error) {
+            alert("Oops we have an issue.....")
+        });
+    databaseRefUserGuessedOne.child("chose").on("value", function(snapshot) {
+            playOneChose = snapshot.val();
+            console.log("Player One Has Chosen? " + playOneChose)
+        },
+        function(error) {
+            alert("Oops we have an issue.....")
+        });
+    databaseRefUserGuessedTwo.child("chose").on("value", function(snapshot) {
+            playTwoChose = snapshot.val();
+            console.log("Player One Has Chosen? " + playTwoChose)
+        },
+        function(error) {
+            alert("Oops we have an issue.....")
+        });
+};
+// This function uses basic logic to determine who wins
+function whichOneTakesIt () {
+    if (userChoicePOne === "rock") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+                
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+                playerTwoWon ();
+        } 
+        else {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+                playerOneWon ();
+        }
+    }
+    else if (userChoicePOne === "paper") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+                playerOneWon ();
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+        } 
+        else {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+                playerTwoWon ();
+        }
+    }
+    else if (userChoicePOne === "scissors") {
+        if (userChoicePTwo === "rock") {
+                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
+                playerTwoWon ();
+        } 
+        else if (userChoicePTwo === "paper") {
+                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
+                playerOneWon ();
+        } 
+        else {
+                $("#middleBox").append("<h3>You Tied!</h3>");
+        }
+    }
+};
+// This listen for players 2 wins and modifies
+function playerTwoWon () {
+    databaseRefPTwoWins.once("value", function(snapshot) {
+        console.log("Two WIns: " + snapshot.val());
+        var xvar = snapshot.val();
+        xvar += 1;
+            databaseRefPTwoWins.set(xvar);
+    
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
+};
+// This listen for players 2 wins and modifies
+function playerOneWon () {
+    databaseRefPOneWins.once("value", function(snapshot) {
+        console.log(snapshot.val());
+        var xvar = snapshot.val();
+        xvar += 1;
+            databaseRefPOneWins.set(xvar);
+    
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
+};
 // This function uses basic logic to determine who wins
 function iAmPrettySureIWon () {
-	var userChoicePOne;
-	var userChoicePTwo;
-	var playOneChose;
-	var playTwoChose;
-	var userTwoScore;
-	databaseRefUserGuessOne.child("choice").on("value", function (snapshot){
-		userChoicePOne = snapshot.val();
-	}, 
-	function (error) {
-		alert("Oops we have an issue.....")
-	});
-	databaseRefUserGuessTwo.child("choice").on("value", function (snapshot){
-		userChoicePTwo = snapshot.val();
-	}, 
-	function (error) {
-		alert("Oops we have an issue.....")
-	});
-	databaseRefUserGuessedOne.child("chose").on("value", function (snapshot){
-		playOneChose = snapshot.val();
-		console.log("Player One Has Chosen? " + playOneChose)
-	}, 
-	function (error) {
-		alert("Oops we have an issue.....")
-	});
-	databaseRefUserGuessedTwo.child("chose").on("value", function (snapshot){
-		playTwoChose = snapshot.val();
-	}, 
-	function (error) {
-		alert("Oops we have an issue.....")
-	});
-	// How can I replicate this below on other screen???
-	if ((playOneChose === true) && (playTwoChose === true)) {
+	listenUp();
+    if ((playOneChose === true) && (playTwoChose === true)) {
 		whatDidYouPickOne(userChoicePOne);
 		whatDidYouPickTwo(userChoicePTwo);
-		if (userChoicePOne === "rock") {
-			
-				if (userChoicePTwo === "rock") {
-				$("#middleBox").append("<h3>You Tied!</h3>");
-				setInterval(function () {
-					bringThemBack();
-				}, 5000);
-				}
-				else if (userChoicePTwo === "paper") { 
-						$("#middleBox").append("<h3>Player 2 Wins!</h3>");
-						databaseRefPTwo.child("wins").on("value", function(snapshot) {
-						console.log(snapshot.val());
-						if (snapshot.val() === 0) {
-							databaseRefPTwo.child("wins").set({wins: 1});	
-						}
-						else {
-							var xvar = snapshot.val() += 1;
-								databaseRefPTwo.child("wins").set({wins: xvar});
-							}
-							}, function (errorObject) {
-							console.log("The read failed.");
-							});
-
-				}
-				else {
-				$("#middleBox").append("<h3>Player 1 Wins!</h3>");
-							databaseRefPOne.child("wins").on("value", function(snapshot) {
-							console.log(snapshot.val());
-						if (snapshot.val() === 0) {
-							databaseRefPOne.child("wins").set({wins: 1});	
-						}
-						else {
-							var xvar = snapshot.val() += 1;
-								databaseRefPOne.child("wins").set({wins: xvar});
-							}
-							}, function (errorObject) {
-							console.log("The read failed.");
-							});
-				};
-			}
-			
-		else if (userChoicePOne === "paper") {
-				if (userChoicePTwo === "rock") {
-				$("#middleBox").append("<h3>Player 1 Wins!</h3>");
-					databaseRefPOne.child("wins").on("value", function(snapshot) {
-						console.log(snapshot.val());
-						if (snapshot.val() === 0) {
-							databaseRefPOne.child("wins").set({wins: 1});	
-						}
-						else {
-							var xvar = snapshot.val() += 1;
-								databaseRefPOne.child("wins").set({wins: xvar});
-							}
-							}, function (errorObject) {
-							console.log("The read failed.");
-							});
-				}
-				else if (userChoicePTwo === "paper") { 
-				$("#middleBox").append("<h3>You Tied!</h3>");
-				}
-				else {
-				$("#middleBox").append("<h3>Player 2 Wins!</h3>");
-					databaseRefPTwo.child("wins").on("value", function(snapshot) {
-						console.log(snapshot.val());
-						if (snapshot.val() === 0) {
-							databaseRefPTwo.child("wins").set({wins: 1});	
-						}
-						else {
-							var xvar = snapshot.val() += 1;
-								databaseRefPTwo.child("wins").set({wins: xvar});
-							}
-							}, function (errorObject) {
-							console.log("The read failed.");
-							});
-				};
-		}
-		else if (userChoicePOne === "scissors") {
-				if (userChoicePTwo === "rock") {
-				$("#middleBox").append("<h3>Player 2 Wins!</h3>");
-					databaseRefPTwo.child("wins").on("value", function(snapshot) {
-						console.log(snapshot.val());
-						if (snapshot.val() === 0) {
-							databaseRefPTwo.child("wins").set({wins: 1});	
-						}
-						else {
-							var xvar = snapshot.val() += 1;
-								databaseRefPTwo.child("wins").set({wins: xvar});
-							}
-							}, function (errorObject) {
-							console.log("The read failed.");
-							});
-				}
-				else if (userChoicePTwo === "paper") { 
-				$("#middleBox").append("<h3>Player 1 Wins!</h3>");
-					databaseRefPOne.child("wins").on("value", function(snapshot) {
-						console.log(snapshot.val());
-						if (snapshot.val() === 0) {
-							databaseRefPOne.child("wins").set({wins: 1});	
-						}
-						else {
-							var xvar = snapshot.val() += 1;
-								databaseRefPOne.child("wins").set({wins: xvar});
-							}
-							}, function (errorObject) {
-							console.log("The read failed.");
-							});
-				}
-		}
-				else {
-				$("#middleBox").append("<h3>You Tied!</h3>");
-			};
-	};	
+        whichOneTakesIt();
+	}	
 };
 // This function takes the users selection and decides what player gave that input and also where to set on server
 function WhatAndWhereToPush () {
@@ -374,6 +339,7 @@ function generateChoices () {
 					});
 				}
 				if (playerTwo === 2) {
+                    var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
 					addPlayerTwoName();
 					$("#choicesToShowOne").empty();
 					$("#choicesToShowTwo").html(choicesToShowTwo);
