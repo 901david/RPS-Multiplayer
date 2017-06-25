@@ -16,6 +16,8 @@ firebase.initializeApp(config);
   var databaseRefPTwo = firebase.database().ref("/Player/Two");
   var databaseRefPOneWins = firebase.database().ref("/Player/One/wins");
   var databaseRefPTwoWins = firebase.database().ref("/Player/Two/wins");
+  var databaseRefPOneLosses = firebase.database().ref("/Player/One/losses");
+  var databaseRefPTwoLosses = firebase.database().ref("/Player/Two/losses");
   var databaseRefChat = firebase.database().ref("/Chat");
   var databaseRefUserGuessedOne = firebase.database().ref("/Player/One/userGuessed");
   var databaseRefUserGuessOne = firebase.database().ref("/Player/One/userGuess");
@@ -218,17 +220,29 @@ function whichOneTakesIt () {
         } 
         else {
                 $("#middleBox").append("<h3>You Tied!</h3>");
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         }
     }
 };
 // This listen for players 2 wins and modifies
 function playerTwoWon () {
     databaseRefPTwoWins.once("value", function(snapshot) {
-        console.log("Two WIns: " + snapshot.val());
+       
         var xvar = snapshot.val();
         xvar += 1;
             databaseRefPTwoWins.set(xvar);
-    
+            $("#winsTwo").html(xvar);
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
+    databaseRefPOneLosses.once("value", function(snapshot) {
+        
+        var yvar = snapshot.val();
+        yvar += 1;
+            databaseRefPOneLosses.set(yvar);
+            $("#lossesOne").html(yvar);
         }, function (errorObject) {
             console.log("The read failed.");
         });
@@ -236,14 +250,25 @@ function playerTwoWon () {
 // This listen for players 2 wins and modifies
 function playerOneWon () {
     databaseRefPOneWins.once("value", function(snapshot) {
-        console.log(snapshot.val());
+        
         var xvar = snapshot.val();
         xvar += 1;
             databaseRefPOneWins.set(xvar);
+            $("#winsOne").html(xvar);
     
         }, function (errorObject) {
             console.log("The read failed.");
         });
+    databaseRefPTwoLosses.once("value", function(snapshot) {
+        
+        var yvar = snapshot.val();
+        yvar += 1;
+            databaseRefPTwoLosses.set(yvar);
+            $("#lossesTwo").html(yvar);
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
+    
 };
 // This function uses basic logic to determine who wins
 function iAmPrettySureIWon () {
@@ -301,9 +326,6 @@ function generateChoices () {
 
     });
 };
-
-
-
  // This function takes the users selection and decides what player gave that input and also where to set on server
 function WhatAndWhereToPush() {
             switch (userChoice) {
@@ -352,50 +374,30 @@ function bringThemBack() {
             databaseRefUserGuessedTwo.set(false);
             databaseRefUserGuessOne.remove();
             databaseRefUserGuessTwo.remove();
-            // Add a value listener that watches the user guess. if they dont exist tehn do this for all.
-            databaseRefPlayer.on("value", function(snapshot) {
-                if ((snapshot.child("One").exists()) && (snapshot.child("Two").exists())) {
-                    $("#middleBox").html("<img class='img-responsive' src='images/hand-motion.gif'>");
-                    if (playerOne === 1) {
-                        var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
-                        $("#choicesToShowOne").html(choicesToShowOne);
-                        $(".choices").on("click", function() {
-                            databaseRefUserGuessedOne.set({
-                                chose: true
-                            });
-                            userChoice = $(this).attr("data-choice");
-                            userData = $(this).attr("data-player");
-                            WhatAndWhereToPush();
-
-                        });
-                    }
-                    if (playerTwo === 2) {
-                        addPlayerTwoName();
-                        $("#choicesToShowOne").empty();
-                        $("#choicesToShowTwo").html(choicesToShowTwo);
-                        $("#scoreTwo").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
-                        $(".choices").on("click", function() {
-                            databaseRefUserGuessedTwo.set({
-                                chose: true
-                            });
-                            userChoice = $(this).attr("data-choice");
-                            userData = $(this).attr("data-player");
-                            WhatAndWhereToPush();
-
-                        });
-                    }
-
-
-
-                }
-            }, function(error) {
-                alert("OOPS -- Something went wrong");
-            });
+            playerOneJoined();
+            playerTwoJoined();
+         
 };
 function playerOneJoined () {
     if (playerOne === 1) {
         var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
         $("#choicesToShowOne").html(choicesToShowOne);
+        $("#scoreOne").html('<br/><p>Wins: <span id="winsOne"></span>      Losses: <span id="lossesOne"></span></p>');
+        databaseRefPOneWins.once("value", function(snapshot) {
+        var xvar = snapshot.val();
+            databaseRefPOneWins.set(xvar);
+            $("#winsOne").html(xvar);
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
+        databaseRefPOneLosses.once("value", function(snapshot) {
+        var yvar = snapshot.val();
+        console.log(yvar + "This is yvar");
+            databaseRefPOneLosses.set(yvar);
+            $("#lossesOne").html(yvar);
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
         $(".choices").on("click", function() {
             databaseRefUserGuessedOne.set({
                 chose: true
@@ -416,7 +418,21 @@ function playerTwoJoined () {
         addPlayerTwoName();
         $("#choicesToShowOne").empty();
         $("#choicesToShowTwo").html(choicesToShowTwo);
-        $("#scoreTwo").append('<br/><p>Wins: <span id="winsTwo">0</span>      Losses: <span id="lossesTwo">0</span></p>');
+        $("#scoreTwo").html('<br/><p>Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
+        databaseRefPTwoWins.once("value", function(snapshot) {
+        var xvar = snapshot.val();
+            databaseRefPTwoWins.set(xvar);
+            $("#winsTwo").html(xvar);
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
+        databaseRefPTwoLosses.once("value", function(snapshot) {
+        var yvar = snapshot.val();
+            databaseRefPTwoLosses.set(yvar);
+            $("#lossesTwo").html(yvar);
+        }, function (errorObject) {
+            console.log("The read failed.");
+        });
         $(".choices").on("click", function() {
             databaseRefUserGuessedTwo.set({
                 chose: true
@@ -518,28 +534,6 @@ $(document).ready(function() {
             });
             getUserName();
             generateChoices();
-            // databaseRefUserGuessedTwo.child("chose").on("value", function (snapshot) {
-            //     console.log(snapshot.val());
-            //  shouldDisplayTwo = snapshot.val();
-            //  if ((shouldDisplayOne === true) && (shouldDisplayTwo === true)) {
-            // whatDidYouPickOne();
-            // whatDidYouPickTwo();
-            // iAmPrettySureIWon();
-            // }; 
-            // }, function (error) {
-            //  alert("Oops looks like we srewed up.");
-            // });
-            // databaseRefUserGuessedOne.child("chose").on("value", function (snapshot) {
-            //  shouldDisplayOne = snapshot.val();
-            //  console.log(snapshot.val());
-            //  if ((shouldDisplayOne === true) && (shouldDisplayTwo === true)) {
-            // whatDidYouPickOne();
-            // whatDidYouPickTwo();
-            // iAmPrettySureIWon();
-            // };
-            // }, function (error) {
-            //  alert("Oops looks like we srewed up.");
-            // });
-            
+           
 
 });
