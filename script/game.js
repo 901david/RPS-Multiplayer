@@ -285,44 +285,6 @@ function listenUp () {
             alert("Oops we have an issue.....")
         });
 };
-// This function uses basic logic to determine who wins
-function whichOneTakesIt () {
-    if (userChoicePOne === "rock") {
-        if (userChoicePTwo === "rock") {
-                $("#middleBox").append("<h3>You Tied!</h3>");
-                
-        } 
-        else if (userChoicePTwo === "paper") {
-                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
-        } 
-        else {
-                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
-        }
-    }
-    else if (userChoicePOne === "paper") {
-        if (userChoicePTwo === "rock") {
-                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
-        } 
-        else if (userChoicePTwo === "paper") {
-                $("#middleBox").append("<h3>You Tied!</h3>");
-        } 
-        else {
-                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
-        }
-    }
-    else if (userChoicePOne === "scissors") {
-        if (userChoicePTwo === "rock") {
-                $("#middleBox").append("<h3>Player 2 Wins!</h3>");
-        } 
-        else if (userChoicePTwo === "paper") {
-                $("#middleBox").append("<h3>Player 1 Wins!</h3>");
-        } 
-        else {
-                $("#middleBox").append("<h3>You Tied!</h3>");
-        }
-    }
-};
-
 // This function will generate the choices on the screen and then call another function to determine what to send off.
 function generateChoices () {
 	databaseRefPlayer.on("child_added", function (snapshot) {
