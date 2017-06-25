@@ -156,38 +156,62 @@ function whichOneTakesIt () {
     if (userChoicePOne === "rock") {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
                 
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         }
     }
     else if (userChoicePOne === "paper") {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         }
     }
     else if (userChoicePOne === "scissors") {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else {
                 $("#middleBox").append("<h3>You Tied!</h3>");
@@ -259,6 +283,8 @@ function haveSelectionsBeenMade () {
         function(error) {
             alert("Oops we have an issue.....")
         });
+    console.log("has player two chosen: " + playTwoChose);
+    console.log("has player one chosen: " + playOneChose);
     if ((playOneChose === true) && (playTwoChose === true)) {
         whichOneTakesIt();
         
@@ -352,6 +378,7 @@ function showImages () {
         function(error) {
             alert("Oops we have an issue.....")
         });
+
 };
 // This updates score on screen
 function keepScore () {
@@ -387,6 +414,7 @@ function keepScore () {
         });
         $("#scoreOne").html('<br/><p class="hide" id="oneScore">Wins: <span id="winsOne"></span>      Losses: <span id="lossesOne"></span></p>');
         $("#scoreTwo").html('<br/><p class="hide" id="twoScore">Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
+
 };
 function playerOneJoined () {
     if (playerOne === 1) {
@@ -481,9 +509,7 @@ $(document).ready(function() {
             $("#disconnect").on("click", function() {
                 databaseRefPlayer.remove();
             });
-            // body.addEventListener("unload", function () {
-            //  alert("This Worked");
-            // });
+           
 
 
 
@@ -502,7 +528,7 @@ $(document).ready(function() {
             generateChoices();
             keepScore();
             showImages();
-            // haveSelectionsBeenMade();
+            
 
            
 
