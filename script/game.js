@@ -356,6 +356,8 @@ function bringThemBack() {
             databaseRefUserGuessedTwo.set(false);
             databaseRefUserGuessOne.remove();
             databaseRefUserGuessTwo.remove();
+            console.log(playerOne);
+            console.log(playerTwo);
             playerOneJoined();
             playerTwoJoined();
          
@@ -515,7 +517,9 @@ $(document).ready(function() {
 
 
             databaseRefPTwo.child("name").on("value", function(snapshot) {
+                
                 $("#nameSpotRight").html(snapshot.val()).addClass("slightlyBigger");
+
             }, function(error) {
                 alert("Oops looks like we srewed up.");
             });
