@@ -148,6 +148,7 @@ function addPlayerTwoName () {
 function flashEmUp () {
     $(".one").removeClass("hide");
     $(".two").removeClass("hide");
+    $(".removeMe").addClass("hide");
 };
 // This function uses basic logic to determine who wins
 function whichOneTakesIt () {
@@ -156,26 +157,26 @@ function whichOneTakesIt () {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
-                // setInterval(function () {
-                //     bringThemBack()
-                // }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
                 
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
                 flashEmUp();
-        //         setInterval(function () {
-        //             bringThemBack()
-        //         }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else if (userChoicePTwo === 'scissors') {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
                 flashEmUp();
-                // setInterval(function () {
-                //     bringThemBack()
-                // }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         }
     }
     else if (userChoicePOne === "paper") {
@@ -183,23 +184,23 @@ function whichOneTakesIt () {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
                 flashEmUp();
-                // setInterval(function () {
-                //     bringThemBack()
-                // }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
-                // setInterval(function () {
-                //     bringThemBack()
-                // }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else if (userChoicePTwo === "scissors"){
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
-                // setInterval(function () {
-                //     bringThemBack()
-                // }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         }
     }
     else if (userChoicePOne === "scissors") {
@@ -207,23 +208,23 @@ function whichOneTakesIt () {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
                 flashEmUp();
-                // setInterval(function () {
-                //     bringThemBack()
-                // }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
-                // setInterval(function () {
-                //     bringThemBack()
-                // }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         } 
         else if (userChoicePTwo === "scissors"){
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
-                // setInterval(function () {
-                //     bringThemBack()
-                // }, 5000);
+                setInterval(function () {
+                    bringThemBack()
+                }, 5000);
         }
     }
 };
@@ -492,13 +493,13 @@ function playerTwoJoined () {
 function whatDidYouPickOne(x) {
             switch (x) {
                 case "rock":
-                    $("#choicesToShowOne").html("<img alt='rock' src='images/rock.png' class='one hide img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
+                    $("#choicesToShowOne").html("<p class='removeMe'>Waiting on Other Player</p><img alt='rock' src='images/rock.png' class='one hide img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
                     break;
                 case "paper":
-                    $("#choicesToShowOne").html("<img alt='paper' src='images/paper.png' class='one hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
+                    $("#choicesToShowOne").html("<p class='removeMe'>Waiting on Other Player</p><img alt='paper' src='images/paper.png' class='one hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
                     break;
                 case "scissors":
-                    $("#choicesToShowOne").html("<img alt='scissors' src='images/scissors.png' class='one hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
+                    $("#choicesToShowOne").html("<p class='removeMe'>Waiting on Other Player</p><img alt='scissors' src='images/scissors.png' class='one hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
                     break;
                 default:
                     console.log("Nothing Chosen");
@@ -509,13 +510,13 @@ function whatDidYouPickOne(x) {
 function whatDidYouPickTwo(y) {
             switch (y) {
                 case "rock":
-                    $("#choicesToShowTwo").html("<img alt='rock' src='images/rock.png' class='two hide img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
+                    $("#choicesToShowTwo").html("<p class='removeMe'>Waiting on Other Player</p><img alt='rock' src='images/rock.png' class='two hide img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
                     break;
                 case "paper":
-                    $("#choicesToShowTwo").html("<img  src='images/paper.png' class='two hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
+                    $("#choicesToShowTwo").html("<p class='removeMe'>Waiting on Other Player</p><img  src='images/paper.png' class='two hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
                     break;
                 case "scissors":
-                    $("#choicesToShowTwo").html("<img  alt='scissors' src='images/scissors.png' class='two hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
+                    $("#choicesToShowTwo").html("<p class='removeMe'>Waiting on Other Player</p><img  alt='scissors' src='images/scissors.png' class='two hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
                     break;
                 default:
                     console.log("Nothing Chosen");
