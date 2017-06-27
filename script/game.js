@@ -20,10 +20,9 @@ firebase.initializeApp(config);
   var databaseRefPOneLosses = firebase.database().ref("/Player/One/losses");
   var databaseRefPTwoLosses = firebase.database().ref("/Player/Two/losses");
   var databaseRefChat = firebase.database().ref("/Chat");
-  var databaseRefUserGuessedOne = firebase.database().ref("/Player/One/userGuessed");
   var databaseRefUserGuessOne = firebase.database().ref("/Player/One/userGuess");
   var databaseRefUserGuessTwo = firebase.database().ref("/Player/Two/userGuess");
-  var databaseRefUserGuessedTwo = firebase.database().ref("/Player/Two/userGuessed");
+  var databaseRefUserChoices = firebase.database().ref("/Playerchoices");
 
 
 // Definition of Variables
@@ -99,9 +98,7 @@ function shouldWeAddAnother() {
                     wins: 0,
                     losses: 0
                 });
-                databaseRefUserGuessedOne.set({
-                    chose: false
-                });
+                
             } else if (!(snapshot.child("Two").exists())) {
                 playerTwo = 2;
                 databaseRefPTwo.set({
@@ -109,9 +106,7 @@ function shouldWeAddAnother() {
                     wins: 0,
                     losses: 0
                 });
-                databaseRefUserGuessedTwo.set({
-                    chose: false
-                });
+                
             } else {
                 alert("Too many players");
             }
@@ -153,6 +148,7 @@ function addPlayerTwoName () {
 
 // This function uses basic logic to determine who wins
 function whichOneTakesIt () {
+
     if (userChoicePOne === "rock") {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
@@ -267,28 +263,24 @@ function playerOneWon () {
 };
 // This function uses basic logic to determine who wins
 function haveSelectionsBeenMade () {
-    databaseRefUserGuessedOne.child("chose").on("value", function(snapshot) {
-            playOneChose = snapshot.val();
-            console.log("Player One Has Chosen? " + playOneChose)
-            
+    databaseRefUserChoices.on("value", function(snapshot) {
+            userChoicesObj = snapshot.val();
+            console.log(userChoicesObj);
+            playOneChose = userChoicesObj.one;
+            playTwoChose = userChoicesObj.two;
+             if ((playOneChose === true) && (playTwoChose === true)) {
+                
+                console.log("has player two chosen: " + playTwoChose);
+                console.log("has player one chosen: " + playOneChose);
+            }
+
         },
         function(error) {
             alert("Oops we have an issue.....")
         });
-    databaseRefUserGuessedTwo.child("chose").on("value", function(snapshot) {
-            playTwoChose = snapshot.val();
-            console.log("Player One Has Chosen? " + playTwoChose)
-            
-        },
-        function(error) {
-            alert("Oops we have an issue.....")
-        });
-    console.log("has player two chosen: " + playTwoChose);
-    console.log("has player one chosen: " + playOneChose);
-    if ((playOneChose === true) && (playTwoChose === true)) {
-        whichOneTakesIt();
-        
-    }
+    
+    
+   
     	
 };
 
@@ -352,8 +344,10 @@ function WhatAndWhereToPush() {
 function bringThemBack() {
             $("#choicesToShowOne").empty();
             $("#choicesToShowTwo").empty();
-            databaseRefUserGuessedOne.set(false);
-            databaseRefUserGuessedTwo.set(false);
+            databaseRefUserChoices.set({
+                one: false,
+                two: false
+            })
             databaseRefUserGuessOne.remove();
             databaseRefUserGuessTwo.remove();
             console.log(playerOne);
@@ -363,19 +357,38 @@ function bringThemBack() {
          
 };
 // This function will update the images on the screens
-function showImages () {
+function setUpListenersThatWillShowImages () {
     databaseRefUserGuessOne.child("choice").on("value", function(snapshot) {
             userChoicePOne = snapshot.val();
             console.log("User 1 CHoice: " + userChoicePOne);
+            databaseRefPTwo.once("value", function (snapshot){
+                console.log(snapshot.val());
+                var fvar = snapshot.val();
+            if (!(fvar.userGuess ==="")) {
+
             whatDidYouPickOne(userChoicePOne);
+            whatDidYouPickTwo(userChoicePTwo);
+            whichOneTakesIt();
+            
+            }
+            });
         },
         function(error) {
             alert("Oops we have an issue.....")
         });
     databaseRefUserGuessTwo.child("choice").on("value", function(snapshot) {
             userChoicePTwo = snapshot.val();
-            console.log("User 2 CHoice: " + userChoicePTwo);
+            databaseRefPOne.once("value", function (snapshot){
+                console.log(snapshot.val());
+                var gvar = snapshot.val();
+            if (!(gvar.userGuess ==="")) {
+
+            whatDidYouPickOne(userChoicePOne);
             whatDidYouPickTwo(userChoicePTwo);
+            whichOneTakesIt();
+            
+            }
+            });
         },
         function(error) {
             alert("Oops we have an issue.....")
@@ -424,13 +437,13 @@ function playerOneJoined () {
         $("#choicesToShowOne").html(choicesToShowOne);
         $("#oneScore").removeClass("hide");
         $(".choices").on("click", function() {
-            databaseRefUserGuessedOne.set({
-                chose: true
+            databaseRefUserChoices.update({
+                one: true
             });
             userChoice = $(this).attr("data-choice");
             userData = $(this).attr("data-player");
             WhatAndWhereToPush();
-            haveSelectionsBeenMade();
+            
 
 
         });
@@ -444,13 +457,13 @@ function playerTwoJoined () {
         $("#choicesToShowTwo").html(choicesToShowTwo);
         $("#twoScore").removeClass("hide");
         $(".choices").on("click", function() {
-            databaseRefUserGuessedTwo.set({
-                chose: true
+            databaseRefUserChoices.update({
+                two: true
             });
             userChoice = $(this).attr("data-choice");
             userData = $(this).attr("data-player");
             WhatAndWhereToPush();
-            haveSelectionsBeenMade();
+            
 
         });
     }
@@ -507,6 +520,10 @@ function talkShitGetHit() {
             });
 };
 $(document).ready(function() {
+            databaseRefUserChoices.set({
+                one: false,
+                two: false
+            });
             // For testing purposes only
             $("#disconnect").on("click", function() {
                 databaseRefPlayer.remove();
@@ -531,8 +548,9 @@ $(document).ready(function() {
             getUserName();
             generateChoices();
             keepScore();
-            showImages();
-            
+            setUpListenersThatWillShowImages();
+            haveSelectionsBeenMade();
+
 
            
 
