@@ -145,75 +145,79 @@ function addPlayerTwoName () {
 		});
 	
 };
-
+function flashEmUp () {
+    $("#choicesToShowOne img").removeClass("hide");
+    $("#choicesToShowTwo img").removeClass("hide");
+};
 // This function uses basic logic to determine who wins
 function whichOneTakesIt () {
 
     if (userChoicePOne === "rock") {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+                flashEmUp();
+                // setInterval(function () {
+                //     bringThemBack()
+                // }, 5000);
                 
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+        //         setInterval(function () {
+        //             bringThemBack()
+        //         }, 5000);
         } 
-        else {
+        else if (userChoicePTwo === 'scissors') {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+                // setInterval(function () {
+                //     bringThemBack()
+                // }, 5000);
         }
     }
     else if (userChoicePOne === "paper") {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+                // setInterval(function () {
+                //     bringThemBack()
+                // }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+                // setInterval(function () {
+                //     bringThemBack()
+                // }, 5000);
         } 
-        else {
+        else if (userChoicePTwo === "scissors"){
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+                // setInterval(function () {
+                //     bringThemBack()
+                // }, 5000);
         }
     }
     else if (userChoicePOne === "scissors") {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+                // setInterval(function () {
+                //     bringThemBack()
+                // }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+                // setInterval(function () {
+                //     bringThemBack()
+                // }, 5000);
         } 
-        else {
+        else if (userChoicePTwo === "scissors"){
                 $("#middleBox").append("<h3>You Tied!</h3>");
-                setInterval(function () {
-                    bringThemBack()
-                }, 5000);
+                // setInterval(function () {
+                //     bringThemBack()
+                // }, 5000);
         }
     }
 };
@@ -262,27 +266,27 @@ function playerOneWon () {
     
 };
 // This function uses basic logic to determine who wins
-function haveSelectionsBeenMade () {
-    databaseRefUserChoices.on("value", function(snapshot) {
-            userChoicesObj = snapshot.val();
-            console.log(userChoicesObj);
-            playOneChose = userChoicesObj.one;
-            playTwoChose = userChoicesObj.two;
-             if ((playOneChose === true) && (playTwoChose === true)) {
-                
-                console.log("has player two chosen: " + playTwoChose);
-                console.log("has player one chosen: " + playOneChose);
-            }
+// function haveSelectionsBeenMade () {
+//     databaseRefUserChoices.on("value", function(snapshot) {
+//             userChoicesObj = snapshot.val();
+//             console.log(userChoicesObj);
+//             playOneChose = userChoicesObj.one;
+//             playTwoChose = userChoicesObj.two;
+//              if ((playOneChose === true) && (playTwoChose === true)) {
+//                 whichOneTakesIt();
+//                 console.log("has player two chosen: " + playTwoChose);
+//                 console.log("has player one chosen: " + playOneChose);
+//             }
 
-        },
-        function(error) {
-            alert("Oops we have an issue.....")
-        });
+//         },
+//         function(error) {
+//             alert("Oops we have an issue.....")
+//         });
     
     
    
     	
-};
+// };
 
 // This function will generate the choices on the screen and then call another function to determine what to send off.
 function generateChoices () {
@@ -344,14 +348,14 @@ function WhatAndWhereToPush() {
 function bringThemBack() {
             $("#choicesToShowOne").empty();
             $("#choicesToShowTwo").empty();
+            userChoicePOne = ""
+            userChoicePTwo = ""
             databaseRefUserChoices.set({
                 one: false,
                 two: false
             })
             databaseRefUserGuessOne.remove();
             databaseRefUserGuessTwo.remove();
-            console.log(playerOne);
-            console.log(playerTwo);
             playerOneJoined();
             playerTwoJoined();
          
@@ -364,13 +368,15 @@ function setUpListenersThatWillShowImages () {
             databaseRefPTwo.once("value", function (snapshot){
                 console.log(snapshot.val());
                 var fvar = snapshot.val();
-            if (!(fvar.userGuess ==="")) {
+                
+            if (!(fvar.userGuess === "")) {
 
             whatDidYouPickOne(userChoicePOne);
-            whatDidYouPickTwo(userChoicePTwo);
+            
             whichOneTakesIt();
             
             }
+           
             });
         },
         function(error) {
@@ -381,13 +387,15 @@ function setUpListenersThatWillShowImages () {
             databaseRefPOne.once("value", function (snapshot){
                 console.log(snapshot.val());
                 var gvar = snapshot.val();
-            if (!(gvar.userGuess ==="")) {
+                
+            if (!(gvar.userGuess === "")) {
 
-            whatDidYouPickOne(userChoicePOne);
+            
             whatDidYouPickTwo(userChoicePTwo);
             whichOneTakesIt();
             
             }
+           
             });
         },
         function(error) {
@@ -397,18 +405,23 @@ function setUpListenersThatWillShowImages () {
 };
 // This updates score on screen
 function keepScore () {
+    
+        $("#scoreOne").html('<br/><p class="oneScore" id="oneGrab">Wins: <span id="winsOne"></span>      Losses: <span id="lossesOne"></span></p>');
+    
+    
+        $("#scoreTwo").html('<br/><p class="twoScore" id="twoGrab">Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
+
         databaseRefPOneWins.on("value", function(snapshot) {
-        var xvar = snapshot.val();
-            databaseRefPOneWins.set(xvar);
-            $("#winsOne").html(xvar);
+        var wvar = snapshot.val();
+            databaseRefPOneWins.set(wvar);
+            $("#winsOne").html(wvar);
         }, function (errorObject) {
             console.log("The read failed.");
         });
         databaseRefPOneLosses.on("value", function(snapshot) {
-        var yvar = snapshot.val();
-        console.log(yvar + "This is yvar");
-            databaseRefPOneLosses.set(yvar);
-            $("#lossesOne").html(yvar);
+        var hvar = snapshot.val();
+            databaseRefPOneLosses.set(hvar);
+            $("#lossesOne").html(hvar);
         }, function (errorObject) {
             console.log("The read failed.");
         });
@@ -427,15 +440,15 @@ function keepScore () {
         }, function (errorObject) {
             console.log("The read failed.");
         });
-        $("#scoreOne").html('<br/><p class="hide" id="oneScore">Wins: <span id="winsOne"></span>      Losses: <span id="lossesOne"></span></p>');
-        $("#scoreTwo").html('<br/><p class="hide" id="twoScore">Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
+       
 
 };
 function playerOneJoined () {
     if (playerOne === 1) {
+        $("#oneGrab").removeClass("oneScore");
         var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
         $("#choicesToShowOne").html(choicesToShowOne);
-        $("#oneScore").removeClass("hide");
+        
         $(".choices").on("click", function() {
             databaseRefUserChoices.update({
                 one: true
@@ -451,11 +464,12 @@ function playerOneJoined () {
 };
 function playerTwoJoined () {
     if (playerTwo === 2) {
+        $("#twoGrab").removeClass("twoScore");
         var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
         addPlayerTwoName();
         $("#choicesToShowOne").empty();
         $("#choicesToShowTwo").html(choicesToShowTwo);
-        $("#twoScore").removeClass("hide");
+        $("#scoreTwo").html('<br/><p id="twoScore">Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
         $(".choices").on("click", function() {
             databaseRefUserChoices.update({
                 two: true
@@ -472,13 +486,13 @@ function playerTwoJoined () {
 function whatDidYouPickOne(x) {
             switch (x) {
                 case "rock":
-                    $("#choicesToShowOne").html("<img alt='rock' src='images/rock.png' class='img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
+                    $("#choicesToShowOne").html("<img alt='rock' src='images/rock.png' class='hide img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
                     break;
                 case "paper":
-                    $("#choicesToShowOne").html("<img alt='paper' src='images/paper.png' class='img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
+                    $("#choicesToShowOne").html("<img alt='paper' src='images/paper.png' class='hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
                     break;
                 case "scissors":
-                    $("#choicesToShowOne").html("<img alt='scissors' src='images/scissors.png' class='img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
+                    $("#choicesToShowOne").html("<img alt='scissors' src='images/scissors.png' class='hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
                     break;
                 default:
                     console.log("Nothing Chosen");
@@ -489,13 +503,13 @@ function whatDidYouPickOne(x) {
 function whatDidYouPickTwo(y) {
             switch (y) {
                 case "rock":
-                    $("#choicesToShowTwo").html("<img alt='rock' src='images/rock.png' class='img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
+                    $("#choicesToShowTwo").html("<img alt='rock' src='images/rock.png' class='hide img-responsive col-xs-7 col-xs-offset-2 col-sm-7 col-sm-offset-2 col-md-7 col-md-offset-2 col-lg-7 col-lg-offset-2'>")
                     break;
                 case "paper":
-                    $("#choicesToShowTwo").html("<img alt='paper' src='images/paper.png' class='img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
+                    $("#choicesToShowTwo").html("<img alt='paper' src='images/paper.png' class='hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
                     break;
                 case "scissors":
-                    $("#choicesToShowTwo").html("<img alt='scissors' src='images/scissors.png' class='img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
+                    $("#choicesToShowTwo").html("<img alt='scissors' src='images/scissors.png' class='hide img-responsive col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2'>")
                     break;
                 default:
                     console.log("Nothing Chosen");

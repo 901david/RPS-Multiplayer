@@ -5,9 +5,7 @@ body {
 	border-bottom: 5px solid black;
 	padding: 0;
 }
-.hide {
-	display:hidden;
-}
+
 .fixBorder {
 	border: 10px solid black;
 	height: 250px;
@@ -64,6 +62,12 @@ body {
 #disconnectOne {
 	text-align: center;
 }
+.oneScore {
+	visibility: hidden;
+}
+.twoScore {
+	visibility: hidden;
+}
 .hide {
-	display: hidden;
+	visibility: hidden;
 }
