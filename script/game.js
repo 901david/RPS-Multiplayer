@@ -150,7 +150,6 @@ function flashEmUp () {
     $(".two").removeClass("hide");
     $(".removeMe").addClass("hide");
 };
-// This function uses basic logic to determine who wins
 function whichOneTakesIt () {
 
     if (userChoicePOne === "rock") {
@@ -198,6 +197,7 @@ function whichOneTakesIt () {
         else if (userChoicePTwo === "scissors"){
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
+                flashEmUp();
                 setTimeout(function () {
                     bringThemBack();
                 }, 5000);
@@ -215,6 +215,7 @@ function whichOneTakesIt () {
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
+                flashEmUp();
                 setTimeout(function () {
                     bringThemBack();
                 }, 5000);
@@ -272,28 +273,6 @@ function playerOneWon () {
         });
     
 };
-// This function uses basic logic to determine who wins
-// function haveSelectionsBeenMade () {
-//     databaseRefUserChoices.on("value", function(snapshot) {
-//             userChoicesObj = snapshot.val();
-//             console.log(userChoicesObj);
-//             playOneChose = userChoicesObj.one;
-//             playTwoChose = userChoicesObj.two;
-//              if ((playOneChose === true) && (playTwoChose === true)) {
-//                 whichOneTakesIt();
-//                 console.log("has player two chosen: " + playTwoChose);
-//                 console.log("has player one chosen: " + playOneChose);
-//             }
-
-//         },
-//         function(error) {
-//             alert("Oops we have an issue.....")
-//         });
-    
-    
-   
-    	
-// };
 
 // This function will generate the choices on the screen and then call another function to determine what to send off.
 function generateChoices () {
@@ -412,22 +391,18 @@ function setUpListenersThatWillShowImages () {
 };
 // This updates score on screen
 function keepScore () {
-    
-        $("#scoreOne").html('<br/><p class="oneScore" id="oneGrab">Wins: <span id="winsOne"></span>      Losses: <span id="lossesOne"></span></p>');
-    
-    
-        $("#scoreTwo").html('<br/><p class="twoScore" id="twoGrab">Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
-
+    $("#scoreOne").html('<br/><p class="oneScore" id="oneGrab">Wins: <span id="winsOne"></span>      Losses: <span id="lossesOne"></span></p>');
+    $("#scoreTwo").html('<br/><p class="twoScore" id="twoGrab">Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
         databaseRefPOneWins.on("value", function(snapshot) {
         var wvar = snapshot.val();
-            // databaseRefPOneWins.set(wvar);
+            databaseRefPOneWins.set(wvar);
             $("#winsOne").html(wvar);
         }, function (errorObject) {
             console.log("The read failed.");
         });
         databaseRefPOneLosses.on("value", function(snapshot) {
         var hvar = snapshot.val();
-            // databaseRefPOneLosses.set(hvar);
+            databaseRefPOneLosses.set(hvar);
             $("#lossesOne").html(hvar);
         }, function (errorObject) {
             console.log("The read failed.");
@@ -435,14 +410,14 @@ function keepScore () {
         
         databaseRefPTwoWins.on("value", function(snapshot) {
         var xvar = snapshot.val();
-            // databaseRefPTwoWins.set(xvar);
+            databaseRefPTwoWins.set(xvar);
             $("#winsTwo").html(xvar);
         }, function (errorObject) {
             console.log("The read failed.");
         });
         databaseRefPTwoLosses.on("value", function(snapshot) {
         var yvar = snapshot.val();
-            // databaseRefPTwoLosses.set(yvar);
+            databaseRefPTwoLosses.set(yvar);
             $("#lossesTwo").html(yvar);
         }, function (errorObject) {
             console.log("The read failed.");
@@ -570,7 +545,7 @@ $(document).ready(function() {
             generateChoices();
             keepScore();
             setUpListenersThatWillShowImages();
-            haveSelectionsBeenMade();
+           
 
 
            
