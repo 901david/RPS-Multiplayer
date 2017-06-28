@@ -157,8 +157,8 @@ function whichOneTakesIt () {
         if (userChoicePTwo === "rock") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
                 
         } 
@@ -166,16 +166,16 @@ function whichOneTakesIt () {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
                 flashEmUp();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
         } 
         else if (userChoicePTwo === 'scissors') {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
                 flashEmUp();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
         }
     }
@@ -184,22 +184,22 @@ function whichOneTakesIt () {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
                 flashEmUp();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
         } 
         else if (userChoicePTwo === "scissors"){
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
         }
     }
@@ -208,22 +208,22 @@ function whichOneTakesIt () {
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
                 flashEmUp();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
         } 
         else if (userChoicePTwo === "scissors"){
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
-                setInterval(function () {
-                    bringThemBack()
+                setTimeout(function () {
+                    bringThemBack();
                 }, 5000);
         }
     }
@@ -420,14 +420,14 @@ function keepScore () {
 
         databaseRefPOneWins.on("value", function(snapshot) {
         var wvar = snapshot.val();
-            databaseRefPOneWins.set(wvar);
+            // databaseRefPOneWins.set(wvar);
             $("#winsOne").html(wvar);
         }, function (errorObject) {
             console.log("The read failed.");
         });
         databaseRefPOneLosses.on("value", function(snapshot) {
         var hvar = snapshot.val();
-            databaseRefPOneLosses.set(hvar);
+            // databaseRefPOneLosses.set(hvar);
             $("#lossesOne").html(hvar);
         }, function (errorObject) {
             console.log("The read failed.");
@@ -435,14 +435,14 @@ function keepScore () {
         
         databaseRefPTwoWins.on("value", function(snapshot) {
         var xvar = snapshot.val();
-            databaseRefPTwoWins.set(xvar);
+            // databaseRefPTwoWins.set(xvar);
             $("#winsTwo").html(xvar);
         }, function (errorObject) {
             console.log("The read failed.");
         });
         databaseRefPTwoLosses.on("value", function(snapshot) {
         var yvar = snapshot.val();
-            databaseRefPTwoLosses.set(yvar);
+            // databaseRefPTwoLosses.set(yvar);
             $("#lossesTwo").html(yvar);
         }, function (errorObject) {
             console.log("The read failed.");
