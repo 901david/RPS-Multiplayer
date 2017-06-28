@@ -154,6 +154,7 @@ function whichOneTakesIt () {
 
     if (userChoicePOne === "rock") {
         if (userChoicePTwo === "rock") {
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
                 setTimeout(function () {
@@ -162,6 +163,7 @@ function whichOneTakesIt () {
                 
         } 
         else if (userChoicePTwo === "paper") {
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
                 flashEmUp();
@@ -170,6 +172,7 @@ function whichOneTakesIt () {
                 }, 5000);
         } 
         else if (userChoicePTwo === 'scissors') {
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
                 flashEmUp();
@@ -180,6 +183,7 @@ function whichOneTakesIt () {
     }
     else if (userChoicePOne === "paper") {
         if (userChoicePTwo === "rock") {
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
                 flashEmUp();
@@ -188,6 +192,7 @@ function whichOneTakesIt () {
                 }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
                 setTimeout(function () {
@@ -195,6 +200,7 @@ function whichOneTakesIt () {
                 }, 5000);
         } 
         else if (userChoicePTwo === "scissors"){
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
                 flashEmUp();
@@ -205,6 +211,7 @@ function whichOneTakesIt () {
     }
     else if (userChoicePOne === "scissors") {
         if (userChoicePTwo === "rock") {
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>Player 2 Wins!</h3>");
                 playerTwoWon ();
                 flashEmUp();
@@ -213,6 +220,7 @@ function whichOneTakesIt () {
                 }, 5000);
         } 
         else if (userChoicePTwo === "paper") {
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>Player 1 Wins!</h3>");
                 playerOneWon ();
                 flashEmUp();
@@ -221,6 +229,7 @@ function whichOneTakesIt () {
                 }, 5000);
         } 
         else if (userChoicePTwo === "scissors"){
+                $("#middleBox").empty();
                 $("#middleBox").append("<h3>You Tied!</h3>");
                 flashEmUp();
                 setTimeout(function () {
@@ -332,6 +341,7 @@ function WhatAndWhereToPush() {
 };
 // This function will allow regeneration of choices
 function bringThemBack() {
+            $("#middleBox").html("<img class='img-responsive' src='images/hand-motion.gif'>");
             $("#choicesToShowOne").empty();
             $("#choicesToShowTwo").empty();
             userChoicePOne = ""
@@ -479,7 +489,7 @@ function whatDidYouPickOne(x) {
                 default:
                     console.log("Nothing Chosen");
             }
-            $("#middleBox").empty();
+            
 };
 
 function whatDidYouPickTwo(y) {
@@ -496,7 +506,7 @@ function whatDidYouPickTwo(y) {
                 default:
                     console.log("Nothing Chosen");
             }
-            $("#middleBox").empty();
+            
 };
 // This function will control chat
 function talkShitGetHit() {
