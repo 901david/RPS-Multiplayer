@@ -344,12 +344,12 @@ function bringThemBack() {
             $("#middleBox").html("<img class='img-responsive' src='images/hand-motion.gif'>");
             $("#choicesToShowOne").empty();
             $("#choicesToShowTwo").empty();
-            userChoicePOne = ""
-            userChoicePTwo = ""
+            userChoicePOne = "";
+            userChoicePTwo = "";
             databaseRefUserChoices.set({
                 one: false,
                 two: false
-            })
+            });
             databaseRefUserGuessOne.remove();
             databaseRefUserGuessTwo.remove();
             playerOneJoined();
@@ -438,6 +438,7 @@ function keepScore () {
 function playerOneJoined () {
     if (playerOne === 1) {
         $("#oneGrab").removeClass("oneScore");
+        $("#twoGrab").removeClass("twoScore");
         var choicesToShowOne = $("<p class='choices' data-player='One' data-choice='rock'>Rock</p><p class='choices' data-player='One' data-choice='paper'>Paper</p><p class='choices' data-player='One' data-choice='scissors'>Scissors</p>");
         $("#choicesToShowOne").html(choicesToShowOne);
         
@@ -456,12 +457,13 @@ function playerOneJoined () {
 };
 function playerTwoJoined () {
     if (playerTwo === 2) {
+        $("#oneGrab").removeClass("oneScore");
         $("#twoGrab").removeClass("twoScore");
         var choicesToShowTwo = $("<p class='choices' data-player='Two' data-choice='rock'>Rock</p><p class='choices' data-player='Two' data-choice='paper'>Paper</p><p class='choices' data-player='Two' data-choice='scissors'>Scissors</p>");
         addPlayerTwoName();
         $("#choicesToShowOne").empty();
         $("#choicesToShowTwo").html(choicesToShowTwo);
-        $("#scoreTwo").html('<br/><p id="twoScore">Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
+        // $("#scoreTwo").html('<br/><p id="twoScore">Wins: <span id="winsTwo"></span>      Losses: <span id="lossesTwo"></span></p>');
         $(".choices").on("click", function() {
             databaseRefUserChoices.update({
                 two: true
@@ -526,14 +528,21 @@ function talkShitGetHit() {
             });
 };
 $(document).ready(function() {
+    keepScore();
+        $(window).bind('unload', function(){
+           
+            databaseRefPlayer.remove();
+
+        });
+        console.log("player: " + databaseRefPlayer);
+        // if (!(databaseRef.hasChild("Player"))) {
+        //     window.location.reload();
+        // }
             databaseRefUserChoices.set({
                 one: false,
                 two: false
             });
-            // For testing purposes only
-            $("#disconnect").on("click", function() {
-                databaseRefPlayer.remove();
-            });
+            
            
 
 
@@ -553,7 +562,7 @@ $(document).ready(function() {
             });
             getUserName();
             generateChoices();
-            keepScore();
+            
             setUpListenersThatWillShowImages();
            
 
