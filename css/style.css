@@ -5,12 +5,10 @@ body {
 	border-bottom: 5px solid black;
 	padding: 0;
 }
-.hide {
-	display:hidden;
-}
+
 .fixBorder {
 	border: 10px solid black;
-	height: 250px;
+	height: 275px;
 	margin:25px;
 }
 .mainSection {
@@ -57,10 +55,32 @@ body {
 .slightlyBigger {
 	font-size: 18px;
 }
-.yourTurn {
-	border:10px solid yellow;
-	box-shadow: 12px 12px;
-}
 #disconnectOne {
 	text-align: center;
+}
+.oneScore {
+	visibility: hidden;
+}
+.twoScore {
+	visibility: hidden;
+}
+.hide {
+	visibility: hidden;
+}
+#middleBox {
+	overflow: hidden;
+}
+#leftBox {
+	overflow: hidden;
+}
+#rightBox {
+	overflow: hidden;
+}
+.one {
+	width:35%;
+	height:35%;
+}
+.two {
+	width:35%;
+	height:35%;
 }
