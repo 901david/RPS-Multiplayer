@@ -495,11 +495,18 @@ function talkShitGetHit() {
         let tempvar = $("#chatInput").val().trim();
         databaseRefChat.push(usernameInput + ": " + tempvar);
         $("#chatInput").val("");
+        databaseChatSnap();
     });
-    databaseRefChat.on("child_added", function(snapshot) {
-        $(".boxCreate").empty().append("<p>" + snapshot.val() + "</p>");
-            }, function(error) { //Handle Errors
-            });
+    function databaseChatSnap () {
+      databaseRefChat.once("value", function(snapshot) {
+          $(".boxCreate").empty().append("<p>" + snapshot.val() + "</p>");
+              }, function(error) {
+                if (error) {
+                  throw error;
+                }
+              });
+    };
+
 };
 $(document).ready(function() {
     keepScore();
