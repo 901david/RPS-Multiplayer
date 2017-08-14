@@ -143,7 +143,7 @@ function addPlayerTwoName () {
 	}, function (error) {
 			//Handle Error
 		});
-	
+
 };
 function flashEmUp () {
     $(".one").removeClass("hide");
@@ -161,7 +161,7 @@ function whichOneTakesIt () {
                 bringThemBack();
             }, 5000);
 
-        } 
+        }
         else if (userChoicePTwo === "paper") {
             $("#middleBox").empty();
             $("#middleBox").append("<h3>Player 2 Wins!</h3>");
@@ -170,7 +170,7 @@ function whichOneTakesIt () {
             setTimeout(function () {
                 bringThemBack();
             }, 5000);
-        } 
+        }
         else if (userChoicePTwo === 'scissors') {
             $("#middleBox").empty();
             $("#middleBox").append("<h3>Player 1 Wins!</h3>");
@@ -190,7 +190,7 @@ function whichOneTakesIt () {
             setTimeout(function () {
                 bringThemBack();
             }, 5000);
-        } 
+        }
         else if (userChoicePTwo === "paper") {
             $("#middleBox").empty();
             $("#middleBox").append("<h3>You Tied!</h3>");
@@ -198,7 +198,7 @@ function whichOneTakesIt () {
             setTimeout(function () {
                 bringThemBack();
             }, 5000);
-        } 
+        }
         else if (userChoicePTwo === "scissors"){
             $("#middleBox").empty();
             $("#middleBox").append("<h3>Player 2 Wins!</h3>");
@@ -218,7 +218,7 @@ function whichOneTakesIt () {
             setTimeout(function () {
                 bringThemBack();
             }, 5000);
-        } 
+        }
         else if (userChoicePTwo === "paper") {
             $("#middleBox").empty();
             $("#middleBox").append("<h3>Player 1 Wins!</h3>");
@@ -227,7 +227,7 @@ function whichOneTakesIt () {
             setTimeout(function () {
                 bringThemBack();
             }, 5000);
-        } 
+        }
         else if (userChoicePTwo === "scissors"){
             $("#middleBox").empty();
             $("#middleBox").append("<h3>You Tied!</h3>");
@@ -275,7 +275,7 @@ function playerOneWon () {
         $("#lossesTwo").html(yvar);
     }, function (errorObject) {
         console.log("The read failed.");
-    });  
+    });
 };
 
 // This function will generate the choices on the screen and then call another function to determine what to send off.
@@ -446,7 +446,7 @@ function playerTwoJoined () {
             userChoice = $(this).attr("data-choice");
             userData = $(this).attr("data-player");
             WhatAndWhereToPush();
-            
+
 
         });
     }
@@ -498,14 +498,14 @@ function talkShitGetHit() {
         $("#chatInput").val("");
     });
     databaseRefChat.on("child_added", function(snapshot) {
-        $(".boxCreate").append("<p>" + snapshot.val() + "</p>");
+        $(".boxCreate").empty().append("<p>" + snapshot.val() + "</p>");
             }, function(error) { //Handle Errors
             });
 };
 $(document).ready(function() {
     keepScore();
     databaseRefPlayer.onDisconnect().remove();
-    
+
     console.log("player: " + databaseRefPlayer);
     databaseRefUserChoices.set({
         one: false,

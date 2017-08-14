@@ -1,5 +1,7 @@
 body {
-	font-family: 'Rock Salt', cursive;
+	background-color: black;
+  color:white;
+
 }
 .topPic {
 	border-bottom: 5px solid black;
@@ -12,7 +14,7 @@ body {
 	margin:25px;
 }
 .mainSection {
-	margin-left: auto; 
+	margin-left: auto;
     margin-right: auto;
     text-align: center;
     clear:both;
@@ -38,7 +40,7 @@ body {
 	border: 2px solid black;
 	height: 150px;
 	overflow: scroll;
-	scroll-snap-point: end; 
+	scroll-snap-point: end;
 }
 .moveDown {
 	margin-top: 10px;
@@ -83,4 +85,23 @@ body {
 .two {
 	width:35%;
 	height:35%;
+}
+#logSpace {
+	padding:0;
+	margin-top: 5%;
+}
+#memberText {
+	margin-right: 1%;
+}
+.hide {
+	display: hidden;
+}
+.clear {
+	clear:both;
+}
+#basicInput {
+	margin-left: 35%;
+}
+#reviewCardSelector {
+	margin-left: 50%;
 }
