@@ -487,13 +487,12 @@ function whatDidYouPickTwo(y) {
 };
 // This function will control chat
 function talkShitGetHit() {
-    var tempvar;
     $("#clearSubmit").click(function() {
         databaseRefChat.remove();
         $(".boxCreate").empty();
     });
     $("#chatSubmit").click(function() {
-        tempvar = $("#chatInput").val().trim();
+        let tempvar = $("#chatInput").val().trim();
         databaseRefChat.push(usernameInput + ": " + tempvar);
         $("#chatInput").val("");
     });
