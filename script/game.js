@@ -491,6 +491,7 @@ function talkShitGetHit() {
     let chats = snapshot.val();
     $(".boxCreate").empty()
       for (let key in chats) {
+        console.log(chats[key]);
         $(".boxCreate").append("<p>" + chats[key] + "</p>");
       }
 
