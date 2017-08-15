@@ -60,6 +60,7 @@ function getUserName() {
             $("#nameArea").empty().append("<p class='headSize'>" + usernameInput + " you are Player 1</p><div id='disconnectOne' class='btn-lg btn-danger col-lg-4 col-lg-offset-2'>Disconnect</div>");
             $("#disconnectOne").on("click", function() {
                 databaseRefPOne.remove();
+                databaseRefChat.remove();
                 playerOne = 0;
                 resetIfDisconnect();
                 $("#nameArea").html('<input type="text" id="nameInput" placeholder="Enter name"><button id="nameSubmission" class="btn btn-danger">Submit</button>');
@@ -135,6 +136,7 @@ function addPlayerTwoName () {
 		$("#nameArea").append('<button id="disconnectTwo" class="btn-lg btn-danger col-lg-4 col-lg-offset-2">Disconnect</button>');
 		$("#disconnectTwo").on("click", function () {
 			databaseRefPTwo.remove();
+      databaseRefChat.remove();
 			playerTwo = 0;
 			resetIfDisconnect();
 			$("#nameArea").html('<input type="text" id="nameInput" placeholder="Enter name"><button id="nameSubmission" class="btn btn-danger">Submit</button>');
