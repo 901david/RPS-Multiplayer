@@ -487,25 +487,33 @@ function whatDidYouPickTwo(y) {
 };
 // This function will control chat
 function talkShitGetHit() {
+  databaseRefChat.on("value", function(snapshot) {
+    let chats = snapshot.val();
+    $(".boxCreate").empty()
+      for (let key in chats) {
+        $(".boxCreate").append("<p>" + chats[key] + "</p>");
+      }
+
+    });
     $("#clearSubmit").click(function() {
         databaseRefChat.remove();
         $(".boxCreate").empty();
     });
     $("#chatSubmit").click(function() {
         let tempvar = $("#chatInput").val().trim();
-        databaseRefChat.push(usernameInput + ": " + tempvar);
-        $("#chatInput").val("");
-        databaseChatSnap();
+        if (tempvar === "") {
+          console.log("No data provided");
+        }
+        else {
+          databaseRefChat.push(usernameInput + ": " + tempvar);
+          $("#chatInput").val("");
+        }
+
     });
-    function databaseChatSnap () {
-      databaseRefChat.once("value", function(snapshot) {
-          $(".boxCreate").empty().append("<p>" + snapshot.val() + "</p>");
-              }, function(error) {
-                if (error) {
-                  throw error;
-                }
-              });
-    };
+
+
+
+
 
 };
 $(document).ready(function() {
